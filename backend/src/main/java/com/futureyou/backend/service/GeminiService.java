@@ -1,25 +1,23 @@
 package com.futureyou.backend.service;
 
-import org.springframework.beans.factory.annotation.Value;
-
-import org.springframework.http.*;
-
-import org.springframework.stereotype.Service;
-
-import org.springframework.web.reactive.function.client.WebClient;
-
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
 
 public class GeminiService{
 
-    @Value("$(gemini.api.key)")
+    @Value("${gemini.api.key}")
     private String apiKey;
 
     private final WebClient webClient = WebClient.create();
 
     public String generate(String prompt){
+        try{
         String url =  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key="+ apiKey;
 
         Map<String, Object> body = 
@@ -29,13 +27,23 @@ public class GeminiService{
             })
         });
 
-        Map response = webClient.post()
+        Map response =
+        webClient
+        .post()
         .uri(url)
         .contentType(MediaType.APPLICATION_JSON)
         .bodyValue(body)
         .retrieve()
         .bodyToMono(Map.class)
         .block();
+
+        if(response == null || response.get("candidates")==null){
+            return """
+            Career Echo is busy  👻
+
+            Please try again later.
+            """;
+        }
 
         Map candidate = (Map)
         ((java.util.List)
@@ -49,5 +57,16 @@ public class GeminiService{
         Map part =(Map) ((java.util.List)content.get("parts")).get(0);
 
         return part.get("text").toString();
-    }
+        }
+        catch(Exception err){
+
+        err.printStackTrace();
+
+        return
+        "ERROR → "
+        +
+        err.getMessage();
+
+        }
+}
 }

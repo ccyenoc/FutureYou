@@ -1,11 +1,10 @@
-import Navbar from "@/frontend/components/layout/Navbar"
+import Navbar from "@/components/layout/Navbar"
 
-import ResumeSection from "@/frontend/components/sections/ResumeSection"
-import DiscoverSection from "@/frontend/components/sections/DiscoverSection"
-import FutureSelfSection from "@/frontend/components/sections/FutureSelfSection"
-import RoadmapSection from "@/frontend/components/sections/RoadmapSection"
-
-import ChatbotSection from "@/frontend/components/sections/ChatbotSection"
+import ResumeSection from "@/components/sections/ResumeSection"
+import DiscoverSection from "@/components/sections/DiscoverSection"
+import FutureSelfSection from "@/components/sections/FutureSelfSection"
+import RoadmapSection from "@/components/sections/RoadmapSection"
+import ChatbotSection from "@/components/sections/ChatbotSection"
 
 export default function Home() {
   return (

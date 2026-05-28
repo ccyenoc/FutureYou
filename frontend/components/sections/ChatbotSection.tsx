@@ -6,91 +6,112 @@ import {
   BookOpen,
   Briefcase,
   TrendingUp,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react"
 
-import {useState, useEffect} from "react";
- 
-export default function ChatbotSection() {
+import { useState } from "react"
+
+type CareerCard = {
+  title: string
+  age: number
+  location: string
+  industry: string
+  workStyle: string
+}
+
+type ChatbotSectionProps = {
+  careers: CareerCard[]
+  selectedCareer: number
+  setSelectedCareer:
+  React.Dispatch<React.SetStateAction<number>>
+}
+
+export default function ChatbotSection({careers,selectedCareer,setSelectedCareer } : ChatbotSectionProps) {
 
   type ChatMessage = {
-  role: "user" | "bot"
-  text: string
+    role: "user" | "bot"
+    text: string
   }
 
   const [message, setMessage] = useState("")
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [loading, setLoading] = useState(false)
 
+
   const sendMessage = async () => {
 
-if (!message.trim()) return
+    if (!message.trim()) return
 
-if(loading) return
+    if (loading) return
 
-const current =
-    message
+    const current = message
 
     setMessages(prev => [
-    ...prev,
-    {
-    role:"user",
-    text:current
-    }
+      ...prev,
+      {
+        role: "user",
+        text: current
+      }
     ])
 
     setMessage("")
     setLoading(true)
 
-    try{
-    const res = await fetch( "http://localhost:8080/chat",
-      {
-      method:"POST",
+    try {
 
-      headers:{
-      "Content-Type":
-      "application/json"
-      },
+      const res = await fetch(
+        "http://localhost:8080/chat",
+        {
+          method: "POST",
 
-      body:JSON.stringify({
-      message:current
-      })
+          headers: {
+            "Content-Type":
+            "application/json"
+          },
+
+          body: JSON.stringify({
+            message: current
+          })
+        }
+      )
+
+      if (!res.ok) {
+        throw new Error(
+          "Backend failed"
+        )
       }
-    )
 
-    if(!res.ok){
-    throw new Error(
-    "Backend failed"
-    )
-    }
+      const data = await res.json()
 
-    const data = await res.json()
-
-    setMessages(prev=>[
-    ...prev,
-    {
-    role:"bot",
-    text:data.reply
-    }
-    ])
-    }
-    catch{
-
-    setMessages(prev=>[
-    ...prev,
-    {
-    role:"bot",
-    text:"Career Echo is busy 👻"
-    }
-    ])
+      setMessages(prev => [
+        ...prev,
+        {
+          role: "bot",
+          text: data.reply
+        }
+      ])
 
     }
-    finally{
-    setLoading(false)
+    catch {
+
+      setMessages(prev => [
+        ...prev,
+        {
+          role: "bot",
+          text: "Career Echo is busy 👻"
+        }
+      ])
+
+    }
+    finally {
+      setLoading(false)
+    }
+
   }
 
-}
-
   return (
+
     <div
       className="
       h-[calc(100vh-140px)]
@@ -109,6 +130,7 @@ const current =
       overflow-hidden
     "
     >
+
       {/* HEADER */}
 
       <div
@@ -137,97 +159,13 @@ const current =
         className="
         flex-1
         overflow-y-auto
-        px-8
+        px-6
         py-6
         space-y-6
       "
       >
-        {/* Avatar */}
 
-        <div className="flex flex-col items-center">
-          <div className="relative">
-            <div
-              className="
-              absolute
-              inset-0
-              bg-yellow-400/30
-              blur-3xl
-              rounded-full
-            "
-            />
-
-            <div
-              className="
-              relative
-              w-[110px]
-              h-[110px]
-              rounded-full
-              bg-gradient-to-b
-              from-[#FFD86E]
-              to-[#FFAA00]
-              border-[8px]
-              border-[#FF8800]
-              flex
-              items-center
-              justify-center
-
-              text-[52px]
-            "
-            >
-              🧑
-            </div>
-
-            <div
-              className="
-              absolute
-              bottom-2
-              right-0
-              w-10
-              h-10
-              rounded-full
-              bg-emerald-400
-              border-4
-              border-[#0B0B16]
-              flex
-              items-center
-              justify-center
-            "
-            >
-              ✨
-            </div>
-
-          </div>
-
-          {/* Identity */}
-
-          <div className="text-center mt-5">
-            <h3
-              className="
-              text-[30px]
-              font-semibold
-              text-violet-400
-            "
-            >
-              AI Product Manager
-            </h3>
-
-            <div
-              className="
-              mt-4
-              space-y-2
-              text-zinc-400
-            "
-            >
-              <p>👤 Age: 27</p>
-              <p>📍 Bangalore, India</p>
-              <p>🏢 Technology Industry</p>
-              <p>💼 Hybrid Work Style</p>
-            </div>
-
-          </div>
-        </div>
-
-        {/* Quick Actions */}
+        {/* QUICK ACTIONS */}
 
         <div>
 
@@ -245,27 +183,41 @@ const current =
             {[
               {
                 icon: TrendingUp,
-                title: "Skill Gap Analysis",
-                subtitle: "See what skills you need"
+                title:
+                `Skill Gap`,
+                subtitle:
+                "See what skills you need"
               },
+
               {
                 icon: BookOpen,
-                title: "Recommended Courses",
-                subtitle: "Courses for your path"
+                title:
+                `Courses`,
+                subtitle:
+                "Courses for your path"
               },
+
               {
                 icon: Briefcase,
-                title: "Career Opportunities",
-                subtitle: "Jobs matching your profile"
+                title:
+                `Jobs Opened`,
+                subtitle:
+                "Jobs matching your future"
               },
+
               {
                 icon: Sparkles,
-                title: "Show My Roadmap",
-                subtitle: "See your next steps"
+                title:
+                `Career Roadmap`,
+                subtitle:
+                "See your next steps"
               }
+
             ].map((item) => (
+
               <button
                 key={item.title}
+
                 className="
                 w-full
                 rounded-[20px]
@@ -278,6 +230,7 @@ const current =
                 transition
               "
               >
+
                 <div className="flex gap-4">
 
                   <item.icon
@@ -286,60 +239,78 @@ const current =
                   />
 
                   <div>
+
                     <p className="text-white">
                       {item.title}
                     </p>
-                    <p className="text-zinc-500 text-sm">
+
+                    <p
+                      className="
+                      text-zinc-500
+                      text-sm
+                    "
+                    >
                       {item.subtitle}
                     </p>
+
                   </div>
 
                 </div>
 
               </button>
+
             ))}
 
           </div>
 
-          <div className="space-y-4">
+        </div>
 
-          {messages.map((msg,index)=>(
+        {/* CHAT MESSAGES */}
 
+        <div className="space-y-4">
+
+          {messages.map((msg, index) => (
 
             <div
-            key={index}
-            className={`
-            rounded-2xl
-            p-4
+              key={index}
 
-            ${ msg.role==="user"? "ml-auto bg-violet-600 text-white" : "mr-auto bg-white/[0.05] text-zinc-200"}
+              className={`
+                rounded-2xl
+                p-4
 
-            max-w-[85%]
+                ${
+                  msg.role === "user"
+                  ?
+                  "ml-auto bg-violet-600 text-white"
+                  :
+                  "mr-auto bg-white/[0.05] text-zinc-200"
+                }
 
-            `}
+                max-w-[85%]
+              `}
             >
-            {msg.text}
+              {msg.text}
             </div>
+
           ))}
 
           {loading && (
 
             <div
-            className="
-            bg-white/[0.05]
-            rounded-2xl
-            p-4
-            animate-pulse
+              className="
+              bg-white/[0.05]
+              rounded-2xl
+              p-4
+              animate-pulse
             "
             >
-            👻 Career Echo is thinking...
+              👻 Career Echo is thinking...
             </div>
 
           )}
 
-          </div>
-
         </div>
+
       </div>
 
       {/* INPUT */}
@@ -357,11 +328,15 @@ const current =
 
         <input
           value={message}
-          onChange={(e)=>
-          setMessage(
-          e.target.value
-          )}
+
+          onChange={(e) =>
+            setMessage(
+              e.target.value
+            )
+          }
+
           placeholder="Ask your future self..."
+
           className="
           flex-1
           rounded-xl
@@ -370,7 +345,7 @@ const current =
           py-3
           text-white
           outline-none
-          "
+        "
         />
 
         <button
@@ -383,12 +358,16 @@ const current =
           items-center
           justify-center
         "
-         onClick={sendMessage}
+
+          onClick={sendMessage}
         >
           <Send size={16} />
         </button>
 
       </div>
+
     </div>
+
   )
+
 }

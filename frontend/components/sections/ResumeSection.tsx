@@ -1,58 +1,61 @@
 "use client"
 
 import { Upload } from "lucide-react"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 
-export default function ResumeSection() {
+type ResumeSectionProps = {
+  setProfile: (profile: any) => void
+}
+
+export default function ResumeSection({setProfile} : ResumeSectionProps) {
   const [isDragOver, setIsDragOver] = useState(false)
 
-const browseFile= () => {
-    document.getElementById("resume-upload")?.click()
-}
+  const browseFile= () => {
+      document.getElementById("resume-upload")?.click()
+  }
 
-const [fileName, setFileName] = useState("")
-const [extractedText, setExtractedText] = useState("")
-const [loading, setLoading] = useState(false)
+  const [fileName, setFileName] = useState("")
+  const [loading, setLoading] = useState(false)
 
-const handleFileChanged = async ( e : React.ChangeEvent<HTMLInputElement> ) => {
-   const file = e.target.files?.[0]
-   console.log(file);
+  const handleFileChanged = async ( e : React.ChangeEvent<HTMLInputElement> ) => {
+    const file = e.target.files?.[0]
+    console.log(file);
 
-   if (!file) return
+    if (!file) return
 
-   setFileName(file.name)
+    setFileName(file.name)
 
-   const formData = new FormData()
+    const formData = new FormData()
 
-   formData.append("file", file)
+    formData.append("file", file)
 
-   if(!file) return
+    if(!file) return
 
-   try{
-    setLoading(true)
+    try{
+      setLoading(true)
 
-    const response = await fetch("http://localhost:8080/resume/upload",
-      {
-        method:"POST",
-        body : formData,
-      }
-    )
+      const response = await fetch("http://localhost:8080/resume/upload",
+        {
+          method:"POST",
+          body : formData,
+        }
+      )
 
-    console.log("File Uploaded!");
-    const text = await response.text()
+      console.log("File Uploaded!");
+      const data = await response.json()
 
-    console.log(text)
+      console.log(data)
 
-    setExtractedText(text)
+      setProfile(data)
 
-   }
-   catch(err){
-    console.log(err)
-   }
-   finally{
-    setLoading(true)
-   }
-}
+    }
+    catch(err){
+      console.log(err)
+    }
+    finally{
+      setLoading(false)
+    }
+  }
 
 
 
@@ -94,14 +97,14 @@ const handleFileChanged = async ( e : React.ChangeEvent<HTMLInputElement> ) => {
           </div>
           <span className="text-white/40">or</span>
           <input
-  id="resume-upload"
-  type="file"
-  accept=".pdf,.doc,.docx"
+            id="resume-upload"
+            type="file"
+            accept=".pdf,.doc,.docx"
 
-  className="hidden"
+            className="hidden"
 
-  onChange={handleFileChanged}
-/>
+            onChange={handleFileChanged}
+          />
 
           <button className="rounded-lg border border-purple-500/60 bg-purple-500/10 px-4 py-2 text-sm font-medium text-purple-300 hover:bg-purple-500/20 transition-colors"
                 onClick={browseFile}>

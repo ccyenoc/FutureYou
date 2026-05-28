@@ -15,7 +15,23 @@ public class ProfileAnalysisPrompt {
     4. Interests
     5. Work style
 
-    Return ONLY valid JSON.
+    IMPORTANT:
+
+    Return ONLY raw valid JSON.
+
+    Do NOT:
+    - explain anything
+    - add markdown
+    - add ```json
+    - add extra text
+
+    Use EXACTLY these keys:
+
+    - domain
+    - skills
+    - strengths
+    - interests
+    - workStyle
 
     Example:
 

@@ -5,7 +5,11 @@ import {
   ChevronDown,
 } from "lucide-react"
 
+import {useState} from "react";
+
+
 export default function Navbar() {
+  const [profile, setProfile] = useState("");
   return (
     <header
       className="
@@ -160,6 +164,7 @@ export default function Navbar() {
               className="text-zinc-300"
             />
           </button>
+
 
           {/* Profile */}
 

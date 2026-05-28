@@ -1,36 +1,48 @@
+"use client"
+
 import { User, Heart, Grid3X3, ArrowRight, Sparkles } from "lucide-react"
 
-const discoverItems = [
+type DiscoverSectionProps = {
+  profile : any
+}
+
+
+export default function DiscoverSection({profile} : DiscoverSectionProps) {
+
+  const discoverItems = [
+
   {
     id: "strengths",
     icon: User,
     title: "Your Strengths",
     subtitle: "What you're good at",
-    items: ["Python", "Machine Learning", "Problem Solving", "Data Analysis"],
+    items: profile?.strengths || [],
     color: "text-blue-400",
     bgColor: "from-blue-500/10 to-blue-500/5"
   },
+
   {
     id: "interests",
     icon: Heart,
     title: "Your Interests",
     subtitle: "What excites you",
-    items: ["AI & Technology", "Building Products", "Solving Problems", "Innovation"],
+    items: profile?.interests || [],
     color: "text-pink-400",
     bgColor: "from-pink-500/10 to-pink-500/5"
   },
+
   {
     id: "workstyle",
     icon: Grid3X3,
     title: "Your Work Style",
     subtitle: "How you like to work",
-    items: ["Analytical Thinker", "Independent", "Detail-Oriented", "Growth Focused"],
+    items: profile?.workStyle || [],
     color: "text-emerald-400",
     bgColor: "from-emerald-500/10 to-emerald-500/5"
   }
+
 ]
 
-export default function DiscoverSection() {
   return (
     <div className="rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-white/[0.02] p-8">
       {/* Header */}
@@ -64,7 +76,7 @@ export default function DiscoverSection() {
 
               {/* Tags */}
               <div className="flex flex-wrap gap-2 mb-5">
-                {item.items.map((skill) => (
+                {item.items.map((skill: string) => (
                   <span
                     key={skill}
                     className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs font-medium text-white/80 hover:bg-white/10 transition-colors"

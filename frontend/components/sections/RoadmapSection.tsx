@@ -1,78 +1,30 @@
 "use client"
 
-import {
-  MapPin,
-  Briefcase,
-  Sparkles,
-} from "lucide-react"
-
-const roadmapPhases = [
-  {
-    number: 1,
-    title: "Foundation",
-    duration: "0 - 3 months",
-    items: [
-      "Strengthen core skills",
-      "Build 2-3 projects",
-      "Learn key tools",
-    ],
-    completed: 0,
-    total: 3,
-  },
-
-  {
-    number: 2,
-    title: "Build & Explore",
-    duration: "3 - 6 months",
-    items: [
-      "Work on real projects",
-      "Explore different roles",
-      "Gain practical experience",
-    ],
-    completed: 0,
-    total: 3,
-  },
-
-  {
-    number: 3,
-    title: "Specialize",
-    duration: "6 - 12 months",
-    items: [
-      "Choose your direction",
-      "Upskill in chosen area",
-      "Get certified",
-    ],
-    completed: 0,
-    total: 3,
-  },
-
-  {
-    number: 4,
-    title: "Launch",
-    duration: "12+ months",
-    items: [
-      "Build your portfolio",
-      "Apply for roles",
-      "Grow your network",
-    ],
-    completed: 0,
-    total: 3,
-  },
-]
+type RoadmapPhase = {
+  phase: string
+  duration: string
+  items: string[]
+}
 
 type Career = {
   title: string
-  age: number
-  location: string
-  industry: string
-  workStyle: string
+  reasoning: string
+  futurePotential: number
+  salaryPotential: number
+  growthPotential: number
+  roadmap: RoadmapPhase[]
 }
 
 type RoadmapSectionProps = {
   career: Career
 }
 
-export default function RoadmapSection({career} : RoadmapSectionProps) {
+export default function RoadmapSection({
+  career,
+}: RoadmapSectionProps) {
+
+  const roadmapPhases =
+  career.roadmap
 
   return (
 
@@ -176,28 +128,81 @@ export default function RoadmapSection({career} : RoadmapSectionProps) {
             {career.title}
           </h1>
 
-          <div
-            className="
-              mt-6
-              flex
-              flex-wrap
-              gap-6
-            "
-          >
+          <div className="mt-6 space-y-3">
 
-            <div className="flex items-center gap-2 text-white/70">
-              <MapPin className="h-4 w-4 text-red-400" />
-              <span>{career.location}</span>
-            </div>
+            <p className="text-white/70 leading-relaxed">
+              {career.reasoning}
+            </p>
 
-            <div className="flex items-center gap-2 text-white/70">
-              <Briefcase className="h-4 w-4 text-zinc-400" />
-              <span>{career.industry}</span>
-            </div>
+            <div
+              className="
+                grid
+                grid-cols-3
+                gap-4
+                pt-3
+              "
+            >
 
-            <div className="flex items-center gap-2 text-white/70">
-              <Sparkles className="h-4 w-4 text-amber-400" />
-              <span>{career.workStyle}</span>
+              <div
+                className="
+                  rounded-xl
+                  border
+                  border-purple-500/20
+                  bg-purple-500/10
+                  p-4
+                "
+              >
+
+                <p className="text-sm text-purple-300">
+                  Future Potential
+                </p>
+
+                <h2 className="mt-2 text-3xl font-bold text-white">
+                  {career.futurePotential}%
+                </h2>
+
+              </div>
+
+              <div
+                className="
+                  rounded-xl
+                  border
+                  border-green-500/20
+                  bg-green-500/10
+                  p-4
+                "
+              >
+
+                <p className="text-sm text-green-300">
+                  Salary Potential
+                </p>
+
+                <h2 className="mt-2 text-3xl font-bold text-white">
+                  {career.salaryPotential}%
+                </h2>
+
+              </div>
+
+              <div
+                className="
+                  rounded-xl
+                  border
+                  border-pink-500/20
+                  bg-pink-500/10
+                  p-4
+                "
+              >
+
+                <p className="text-sm text-pink-300">
+                  Growth Potential
+                </p>
+
+                <h2 className="mt-2 text-3xl font-bold text-white">
+                  {career.growthPotential}%
+                </h2>
+
+              </div>
+
             </div>
 
           </div>
@@ -260,7 +265,7 @@ export default function RoadmapSection({career} : RoadmapSectionProps) {
 
           {roadmapPhases.map((phase, index) => (
 
-            <div key={phase.number} className="relative">
+            <div key={index} className="relative">
 
               {/* STEP NUMBER */}
 
@@ -300,7 +305,7 @@ export default function RoadmapSection({career} : RoadmapSectionProps) {
                     }
                   `}
                 >
-                  {phase.number}
+                  {index + 1}
                 </div>
 
               </div>
@@ -316,11 +321,8 @@ export default function RoadmapSection({career} : RoadmapSectionProps) {
                   rounded-2xl
                   border
                   border-white/10
-
                   bg-white/5
-
                   p-6
-
                   transition-all
                   hover:border-white/20
                   hover:bg-white/[0.07]
@@ -329,8 +331,17 @@ export default function RoadmapSection({career} : RoadmapSectionProps) {
 
                 {/* TITLE */}
 
-                <h3 className="text-2xl font-bold text-white mb-2">
-                  {phase.title}
+                <h3   
+                className="
+                text-1xl
+                leading-tight
+                font-extrabold
+                text-white
+                mb-4
+                break-words
+                hyphens-auto
+              ">
+                  {phase.phase}
                 </h3>
 
                 <p className="text-sm text-zinc-400 mb-6">
@@ -362,7 +373,7 @@ export default function RoadmapSection({career} : RoadmapSectionProps) {
                           h-2
                           w-2
                           rounded-full
-                          bg-white/30
+                          bg-purple-400
                         "
                       />
 
@@ -380,46 +391,13 @@ export default function RoadmapSection({career} : RoadmapSectionProps) {
 
 
 
-                {/* PROGRESS */}
+                {/* FOOTER */}
 
                 <div className="border-t border-white/10 pt-4">
 
-                  <div className="flex items-center justify-between mb-2">
-
-                    <p className="text-sm text-white/50">
-                      Progress
-                    </p>
-
-                    <p className="text-sm font-semibold text-white/70">
-                      {phase.completed}/{phase.total}
-                    </p>
-
-                  </div>
-
-                  <div
-                    className="
-                      h-2
-                      w-full
-                      overflow-hidden
-                      rounded-full
-                      bg-white/10
-                    "
-                  >
-
-                    <div
-                      className="
-                        h-full
-                        rounded-full
-                        bg-gradient-to-r
-                        from-purple-500
-                        to-pink-500
-                      "
-                      style={{
-                        width: `${(phase.completed / phase.total) * 100}%`
-                      }}
-                    />
-
-                  </div>
+                  <p className="text-sm text-purple-300">
+                    AI Personalized Phase
+                  </p>
 
                 </div>
 

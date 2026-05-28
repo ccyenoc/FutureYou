@@ -27,7 +27,7 @@ type ChatbotSectionProps = {
   React.Dispatch<React.SetStateAction<number>>
 }
 
-export default function ChatbotSection({careers,selectedCareer,setSelectedCareer } : ChatbotSectionProps) {
+export default function ChatbotSection() {
 
   type ChatMessage = {
     role: "user" | "bot"

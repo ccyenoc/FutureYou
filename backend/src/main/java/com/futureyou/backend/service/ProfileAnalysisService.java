@@ -37,16 +37,32 @@ public class ProfileAnalysisService{
             .replace("```", "")
             .trim();
 
+            int start = response.indexOf("{");
+            int end = response.lastIndexOf("}");
+
+            if(start != -1 && end != -1){
+                response =
+                response.substring(start, end + 1);
+            }
+
             System.out.println(
                 "Gemini Response:\n"
                 +
                 response
             );
 
-            ObjectMapper mapper =
-            new ObjectMapper();
 
-            return mapper.readValue( response, ProfileAnalysisResponse.class );
+            if (!response.startsWith("{")) {
+
+                System.out.println("Invalid Gemini response:");
+                System.out.println(response);
+
+                throw new RuntimeException("Gemini did not return valid JSON");
+            }
+
+            ObjectMapper mapper = new ObjectMapper();
+
+            return mapper.readValue( response, ProfileAnalysisResponse.class);
 
         }
         catch(Exception err) {
@@ -56,6 +72,7 @@ public class ProfileAnalysisService{
             return new ProfileAnalysisResponse(
 
                 "Unknown",
+                List.of(),
                 List.of(),
                 List.of(),
                 List.of(),

@@ -11,39 +11,11 @@ import ChatbotSection from "@/components/sections/ChatbotSection"
 
 export type Career = {
   title: string
-  age: number
-  location: string
-  industry: string
-  workStyle: string
+  reasoning: string
+  futurePotential: number
+  salaryPotential: number
+  growthPotential: number
 }
-
-const careers: Career[] = [
-
-  {
-    title: "AI Product Manager",
-    age: 27,
-    location: "Bangalore, India",
-    industry: "Technology Industry",
-    workStyle: "Hybrid Work Style"
-  },
-
-  {
-    title: "AI Engineer",
-    age: 26,
-    location: "Singapore",
-    industry: "AI Infrastructure",
-    workStyle: "Remote First"
-  },
-
-  {
-    title: "Startup Founder",
-    age: 29,
-    location: "San Francisco",
-    industry: "Startup Ecosystem",
-    workStyle: "Fast-Paced"
-  }
-
-]
 
 export default function Home() {
 
@@ -52,8 +24,9 @@ export default function Home() {
   const [selectedCareer, setSelectedCareer] =
   useState(0)
 
-  const currentCareer =
-  careers[selectedCareer]
+  const careers = profile?.careers || []
+
+  const currentCareer = careers[selectedCareer]
 
   return (
 
@@ -96,11 +69,11 @@ export default function Home() {
 
           {/* LEFT */}
 
-          <RoadmapSection
-            career={currentCareer}
-          />
-
-
+          {currentCareer && (
+            <RoadmapSection
+              career={currentCareer}
+            />
+          )}
 
           {/* RIGHT CHAT */}
 
@@ -112,11 +85,7 @@ export default function Home() {
             "
           >
 
-            <ChatbotSection
-              careers={careers}
-              selectedCareer={selectedCareer}
-              setSelectedCareer={setSelectedCareer}
-            />
+            <ChatbotSection/>
 
           </div>
 

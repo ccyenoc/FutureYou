@@ -14,6 +14,8 @@ public class ProfileAnalysisResponse {
 
     private List<String> workStyle;
 
+    private List<CareerRecommendation> careers;
+
     public ProfileAnalysisResponse() {
     }
 
@@ -22,15 +24,15 @@ public class ProfileAnalysisResponse {
         List<String> skills,
         List<String> strengths,
         List<String> interests,
-        List<String> workStyle
+        List<String> workStyle,
+        List<CareerRecommendation> careers
     ) {
-
         this.domain = domain;
         this.skills = skills;
         this.strengths = strengths;
         this.interests = interests;
         this.workStyle = workStyle;
-
+        this.careers = careers;
     }
 
     public String getDomain() {
@@ -71,6 +73,14 @@ public class ProfileAnalysisResponse {
 
     public void setWorkStyle(List<String> workStyle) {
         this.workStyle = workStyle;
+    }
+
+    public List<CareerRecommendation> getCareers() {
+        return careers;
+    }
+
+    public void setCareers(List<CareerRecommendation> careers) {
+        this.careers = careers;
     }
 
 }

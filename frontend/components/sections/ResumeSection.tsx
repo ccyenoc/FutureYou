@@ -11,15 +11,47 @@ const browseFile= () => {
 }
 
 const [fileName, setFileName] = useState("")
+const [extractedText, setExtractedText] = useState("")
+const [loading, setLoading] = useState(false)
 
-const handleFileChanged = ( e : React.ChangeEvent<HTMLInputElement> ) => {
+const handleFileChanged = async ( e : React.ChangeEvent<HTMLInputElement> ) => {
    const file = e.target.files?.[0]
+   console.log(file);
+
+   if (!file) return
+
+   setFileName(file.name)
+
+   const formData = new FormData()
+
+   formData.append("file", file)
 
    if(!file) return
 
-   setFileName(file.name);
+   try{
+    setLoading(true)
 
-   console.log(file);
+    const response = await fetch("http://localhost:8080/resume/upload",
+      {
+        method:"POST",
+        body : formData,
+      }
+    )
+
+    console.log("File Uploaded!");
+    const text = await response.text()
+
+    console.log(text)
+
+    setExtractedText(text)
+
+   }
+   catch(err){
+    console.log(err)
+   }
+   finally{
+    setLoading(true)
+   }
 }
 
 

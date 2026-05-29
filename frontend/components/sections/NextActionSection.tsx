@@ -1,6 +1,20 @@
 import { TrendingUp, BookOpen, Briefcase, FileText, ArrowRight } from "lucide-react"
 
-const actionItems = [
+type NextActionSectionProps = {
+  career: Career
+}
+
+type Career = {
+  title: string
+  reasoning: string
+  futurePotential: number
+  salaryPotential: number
+  growthPotential: number
+}
+
+export default function NextActionSection({career} : NextActionSectionProps) {
+
+  const actionItems = [
   {
     id: "skills",
     icon: TrendingUp,
@@ -11,7 +25,7 @@ const actionItems = [
   {
     id: "courses",
     icon: BookOpen,
-    title: "Recommended Courses",
+    title: `${career.title} Courses`,
     description: "Courses tailored for your path",
     color: "from-blue-500/20 to-blue-500/5"
   },
@@ -31,7 +45,6 @@ const actionItems = [
   },
 ]
 
-export default function NextActionSection() {
   return (
     <div className="rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-white/[0.02] p-8 h-full flex flex-col">
       {/* Header */}

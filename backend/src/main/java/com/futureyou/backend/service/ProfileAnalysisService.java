@@ -31,6 +31,20 @@ public class ProfileAnalysisService{
 
             resumeText;
 
+            System.out.println(
+    "Resume Prompt Length = "
+    + prompt.length()
+);
+
+System.out.println(
+    "Resume Text Length = "
+    + resumeText.length()
+);
+
+System.out.println(
+    "Sending resume to Gemini..."
+);
+
             String response =
             geminiService.generate(prompt)
             .replace("```json", "")

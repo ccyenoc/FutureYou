@@ -18,6 +18,7 @@ public class GeminiService{
 
     public String generate(String prompt){
         try{
+            System.out.println("Gemini Key = [" + apiKey + "]");
         String url =  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key="+ apiKey;
 
         Map<String, Object> body = 
@@ -28,14 +29,31 @@ public class GeminiService{
         });
 
         Map response =
-        webClient
-        .post()
-        .uri(url)
-        .contentType(MediaType.APPLICATION_JSON)
-        .bodyValue(body)
-        .retrieve()
-        .bodyToMono(Map.class)
-        .block();
+webClient
+    .post()
+    .uri(url)
+    .contentType(MediaType.APPLICATION_JSON)
+    .bodyValue(body)
+    .retrieve()
+    .onStatus(
+        status -> status.isError(),
+        clientResponse ->
+            clientResponse
+                .bodyToMono(String.class)
+                .flatMap(errorBody -> {
+
+                    System.out.println(
+                        "Gemini Error Body:\n"
+                        + errorBody
+                    );
+
+                    return reactor.core.publisher.Mono.error(
+                        new RuntimeException(errorBody)
+                    );
+                })
+    )
+    .bodyToMono(Map.class)
+    .block();
 
         if(response == null || response.get("candidates")==null){
             return """
@@ -59,14 +77,10 @@ public class GeminiService{
         return part.get("text").toString();
         }
         catch(Exception err){
-
-        err.printStackTrace();
-
-        return
-        "ERROR → "
-        +
-        err.getMessage();
-
+            throw new RuntimeException(
+                "Gemini request failed",
+                err
+            );
         }
 }
 }

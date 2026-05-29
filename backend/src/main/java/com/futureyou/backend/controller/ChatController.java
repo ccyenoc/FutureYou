@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.futureyou.backend.dto.ChatRequest;
 import com.futureyou.backend.dto.ChatResponse;
 import com.futureyou.backend.service.ChatService;
+import com.futureyou.backend.service.JobService;
 
 @RestController
 @RequestMapping("/chat")
@@ -17,9 +18,10 @@ public class ChatController{
     @Autowired
     private ChatService chatService;
 
+    private JobService jobService;
+
     @PostMapping
     public ChatResponse ask( @RequestBody ChatRequest request){
         return chatService.reply(request);
     }
-
 }

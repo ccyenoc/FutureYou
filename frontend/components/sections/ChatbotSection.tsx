@@ -12,32 +12,36 @@ import {
 
 import { useState } from "react"
 
-type CareerCard = {
+type Career = {
   title: string
-  age: number
-  location: string
-  industry: string
-  workStyle: string
+  reasoning: string
+  futurePotential: number
+  salaryPotential: number
+  growthPotential: number
 }
 
 type ChatbotSectionProps = {
-  careers: CareerCard[]
-  selectedCareer: number
-  setSelectedCareer:
-  React.Dispatch<React.SetStateAction<number>>
+  career: Career
 }
 
-export default function ChatbotSection() {
-
-  type ChatMessage = {
+type ChatMessage = {
     role: "user" | "bot"
-    text: string
+    text?: string
+    jobs?: any[]
   }
+
+export default function ChatbotSection({career} : ChatbotSectionProps) {
+
 
   const [message, setMessage] = useState("")
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [loading, setLoading] = useState(false)
 
+  const [jobType, setJobType] = useState("Full Time")
+
+  const [showJobModal, setShowJobModal] = useState(false)
+
+  const [region, setRegion] = useState("")
 
   const sendMessage = async () => {
 
@@ -109,6 +113,77 @@ export default function ChatbotSection() {
     }
 
   }
+
+  const handleQuickAction = async ( action: string ) => {
+
+    let url = ""
+
+    switch(action){
+
+      case "jobs":
+         setShowJobModal(true)
+         return
+
+      case "course":
+        url = `http://localhost:8080/career/courses?career=${career.title}`
+        break
+
+      case "skills":
+        url = `http://localhost:8080/career/skill-gap?career=${career.title}`
+        break
+
+      case "roadmap":
+        url = `http://localhost:8080/career/roadmap?career=${career.title}`
+        break
+    }
+
+    const response = await fetch(url)
+
+    const data = await response.json()
+
+    setMessages(prev => [
+      ...prev,
+      {
+        role:"bot",
+        text:data.message
+      }
+    ])
+  }
+
+  const searchJobs = async () => {
+
+  const response = await fetch(
+    "http://localhost:8080/jobs",
+    {
+      method: "POST",
+
+      headers: {
+        "Content-Type":
+        "application/json"
+      },
+
+      body: JSON.stringify({
+        career: career.title,
+        jobType,
+        region
+      })
+    }
+  )
+
+  const data = await response.json()
+
+  setMessages(prev => [
+      ...prev,
+      {
+        role: "bot",
+        jobs: data.jobs
+      }
+    ])
+
+  console.log(data)
+
+  setShowJobModal(false)
+}
 
   return (
 
@@ -182,42 +257,37 @@ export default function ChatbotSection() {
 
             {[
               {
+                id:"skills",
                 icon: TrendingUp,
                 title:
-                `Skill Gap`,
+                `${career.title} Skill Gap`,
                 subtitle:
                 "See what skills you need"
               },
 
               {
+                id:"course",
                 icon: BookOpen,
                 title:
-                `Courses`,
+                `${career.title} Courses`,
                 subtitle:
                 "Courses for your path"
               },
 
               {
+                id:"jobs",
                 icon: Briefcase,
                 title:
-                `Jobs Opened`,
+                `${career.title} Jobs`,
                 subtitle:
                 "Jobs matching your future"
               },
-
-              {
-                icon: Sparkles,
-                title:
-                `Career Roadmap`,
-                subtitle:
-                "See your next steps"
-              }
 
             ].map((item) => (
 
               <button
                 key={item.title}
-
+                onClick={ () => handleQuickAction(item.id)}
                 className="
                 w-full
                 rounded-[20px]
@@ -271,43 +341,70 @@ export default function ChatbotSection() {
 
           {messages.map((msg, index) => (
 
-            <div
-              key={index}
+          <div key={index}>
 
-              className={`
-                rounded-2xl
-                p-4
+            {msg.jobs?.map((job, i) => (
 
-                ${
-                  msg.role === "user"
-                  ?
-                  "ml-auto bg-violet-600 text-white"
-                  :
-                  "mr-auto bg-white/[0.05] text-zinc-200"
-                }
+              <a
+                key={i}
+                href={job.url}
+                target="_blank"
+                rel="noreferrer"
+                className="
+                  block
+                  rounded-xl
+                  border
+                  border-white/10
+                  bg-white/5
+                  p-4
+                  hover:border-violet-500/40
+                "
+              >
 
-                max-w-[85%]
-              `}
-            >
-              {msg.text}
-            </div>
+                <h4 className="font-semibold text-white">
+                  {job.title}
+                </h4>
 
-          ))}
+                <p className="text-sm text-violet-300 mt-1">
+                  {job.company}
+                </p>
 
-          {loading && (
+                <p className="text-sm text-zinc-400">
+                  {job.location}
+                </p>
 
-            <div
-              className="
-              bg-white/[0.05]
-              rounded-2xl
-              p-4
-              animate-pulse
-            "
-            >
-              👻 Career Echo is thinking...
-            </div>
+                <span
+                  className="
+                    inline-block
+                    mt-2
+                    rounded-full
+                    bg-violet-500/20
+                    px-2
+                    py-1
+                    text-xs
+                    text-violet-300
+                  "
+                >
+                  {job.type}
+                </span>
 
-          )}
+                {job.summary && (
+                  <p className="text-sm text-zinc-300 mt-3">
+                    {job.summary}
+                  </p>
+                )}
+
+                <p className="text-xs text-violet-400 mt-3">
+                  Open Job →
+                </p>
+
+              </a>
+
+            ))}
+
+          </div>
+
+        ))}
 
         </div>
 
@@ -363,11 +460,135 @@ export default function ChatbotSection() {
         >
           <Send size={16} />
         </button>
+        
+
+      </div>
+
+      {showJobModal && (
+
+  <div
+    className="
+      fixed
+      inset-0
+      bg-black/70
+      flex
+      items-center
+      justify-center
+      z-50
+    "
+  >
+
+    <div
+      className="
+        w-[420px]
+        rounded-2xl
+        border
+        border-white/10
+        bg-[#111]
+        p-6
+      "
+    >
+
+      <h3 className="text-xl font-bold text-white mb-4">
+        Find {career.title} Jobs
+      </h3>
+
+      {/* Job Type */}
+
+      <label className="block text-sm text-zinc-400 mb-2">
+        Job Type
+      </label>
+
+      <select
+        value={jobType}
+        onChange={(e) =>
+          setJobType(e.target.value)
+        }
+        className="
+          w-full
+          rounded-xl
+          bg-white/5
+          p-3
+          text-white
+          mb-4
+        "
+      >
+        <option value="Full Time">
+          Full Time
+        </option>
+
+        <option value="Part Time">
+          Part Time
+        </option>
+
+        <option value="Internship">
+          Internship
+        </option>
+      </select>
+
+      {/* Region */}
+
+      <label className="block text-sm text-zinc-400 mb-2">
+        Region
+      </label>
+
+      <input
+        value={region}
+        onChange={(e) =>
+          setRegion(e.target.value)
+        }
+        placeholder="Malaysia, Singapore, Remote..."
+        className="
+          w-full
+          rounded-xl
+          bg-white/5
+          p-3
+          text-white
+        "
+      />
+
+      <div className="flex gap-3 mt-5">
+
+        <button
+          onClick={() =>
+            setShowJobModal(false)
+          }
+          className="
+            flex-1
+            rounded-xl
+            border
+            border-white/10
+            py-3
+            text-white
+          "
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={searchJobs}
+          className="
+            flex-1
+            rounded-xl
+            bg-violet-600
+            py-3
+            text-white
+          "
+        >
+          Search Jobs
+        </button>
 
       </div>
 
     </div>
 
+  </div>
+
+)}
+
+    </div>
+
   )
+
 
 }

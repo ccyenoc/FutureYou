@@ -69,11 +69,46 @@ export default function Home() {
 
           {/* LEFT */}
 
-          {currentCareer && (
-            <RoadmapSection
-              career={currentCareer}
-            />
-          )}
+
+         <div className="space-y-4">
+
+            {/* CAREER SELECTOR */}
+
+            {careers.length > 0 && (
+
+              <div className="flex gap-3">
+
+                {careers.map((career: Career, index: number) => (
+
+                  <button
+                    key={career.title}
+                    onClick={() => setSelectedCareer(index)}
+                    className={`
+                      px-4 py-2 rounded-xl border transition-all
+
+                      ${
+                        selectedCareer === index
+                          ? "border-purple-500 bg-purple-500/10 text-purple-300"
+                          : "border-white/10 bg-white/5 text-white"
+                      }
+                    `}
+                  >
+                    {career.title}
+                  </button>
+
+                ))}
+
+              </div>
+
+            )}
+
+            {/* ROADMAP */}
+
+            {currentCareer && (
+              <RoadmapSection career={currentCareer} />
+            )}
+
+          </div>
 
           {/* RIGHT CHAT */}
 
@@ -85,7 +120,11 @@ export default function Home() {
             "
           >
 
-            <ChatbotSection/>
+            {currentCareer && (
+              <ChatbotSection
+                career={currentCareer}
+              />
+            )}
 
           </div>
 

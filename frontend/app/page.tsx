@@ -123,6 +123,7 @@ export default function Home() {
             {currentCareer && (
               <ChatbotSection
                 career={currentCareer}
+                analysis={profile}
               />
             )}
 

@@ -22,15 +22,17 @@ type Career = {
 
 type ChatbotSectionProps = {
   career: Career
+  analysis: any
 }
 
 type ChatMessage = {
     role: "user" | "bot"
     text?: string
     jobs?: any[]
+    skillGap?: any
   }
 
-export default function ChatbotSection({career} : ChatbotSectionProps) {
+export default function ChatbotSection({career, analysis} : ChatbotSectionProps) {
 
 
   const [message, setMessage] = useState("")
@@ -128,9 +130,38 @@ export default function ChatbotSection({career} : ChatbotSectionProps) {
         url = `http://localhost:8080/career/courses?career=${career.title}`
         break
 
-      case "skills":
-        url = `http://localhost:8080/career/skill-gap?career=${career.title}`
-        break
+     case "skills":
+
+        const response = await fetch(
+          "http://localhost:8080/skill-gap",
+          {
+            method:"POST",
+
+            headers:{
+              "Content-Type":
+              "application/json"
+            },
+
+            body:JSON.stringify({
+              career: career.title,
+              skills: analysis.skills,
+              strengths: analysis.strengths
+            })
+          }
+        )
+
+        const data =
+          await response.json()
+
+        setMessages(prev => [
+          ...prev,
+          {
+            role:"bot",
+            skillGap:data
+          }
+        ])
+
+        return
 
       case "roadmap":
         url = `http://localhost:8080/career/roadmap?career=${career.title}`
@@ -401,6 +432,101 @@ export default function ChatbotSection({career} : ChatbotSectionProps) {
               </a>
 
             ))}
+            {msg.skillGap && (
+
+              <div
+                className="
+                  rounded-xl
+                  border
+                  border-white/10
+                  bg-white/5
+                  p-4
+                "
+              >
+
+                <h3 className="text-white font-bold mb-3">
+                  🎯 Skill Gap Analysis
+                </h3>
+
+                <div className="mb-4">
+
+                  <p className="text-green-400 mb-2">
+                    Matched Skills
+                  </p>
+
+                  {msg.skillGap.matchedSkills?.map(
+                    (skill:string) => (
+
+                      <div
+                        key={skill}
+                        className="text-zinc-300"
+                      >
+                        ✓ {skill}
+                      </div>
+
+                  ))}
+                </div>
+
+                <div className="mb-4">
+
+                  <p className="text-yellow-400 mb-2">
+                    Missing Technical Skills
+                  </p>
+
+                  {msg.skillGap.missingTechnicalSkills?.map(
+                    (skill:string) => (
+
+                      <div
+                        key={skill}
+                        className="text-zinc-300"
+                      >
+                        ⚠ {skill}
+                      </div>
+
+                  ))}
+                </div>
+
+                <div className="mb-4">
+
+                  <p className="text-pink-400 mb-2">
+                    Missing Soft Skills
+                  </p>
+
+                  {msg.skillGap.missingSoftSkills?.map(
+                    (skill:string) => (
+
+                      <div
+                        key={skill}
+                        className="text-zinc-300"
+                      >
+                        ⚠ {skill}
+                      </div>
+
+                  ))}
+                </div>
+
+                <div>
+
+                  <p className="text-violet-400 mb-2">
+                    Top Priority Skills
+                  </p>
+
+                  {msg.skillGap.topPrioritySkills?.map(
+                    (skill:string) => (
+
+                      <div
+                        key={skill}
+                        className="text-zinc-300"
+                      >
+                        🔥 {skill}
+                      </div>
+
+                  ))}
+                </div>
+
+              </div>
+
+            )}
 
           </div>
 

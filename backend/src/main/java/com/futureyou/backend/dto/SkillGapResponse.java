@@ -4,45 +4,68 @@ import java.util.List;
 
 public class SkillGapResponse {
 
-    private List<String> missingSkills;
+    private List<String> matchedSkills;
 
-    private List<String> recommendedLearning;
+    private List<String> missingTechnicalSkills;
 
-    private String summary;
+    private List<String> missingSoftSkills;
+
+    private List<String> topPrioritySkills;
+
+    public SkillGapResponse() {}
 
     public SkillGapResponse(
-        List<String> missingSkills , 
-        List<String> recommendedLearning , 
-        String summary 
+        List<String> matchedSkills,
+        List<String> missingTechnicalSkills,
+        List<String> missingSoftSkills,
+        List<String> topPrioritySkills
     ) {
-
-        this.missingSkills = missingSkills;
-        this.recommendedLearning = recommendedLearning;
-        this.summary = summary;
+        this.matchedSkills = matchedSkills;
+        this.missingTechnicalSkills = missingTechnicalSkills;
+        this.missingSoftSkills = missingSoftSkills;
+        this.topPrioritySkills = topPrioritySkills;
     }
 
-    public void setMissingSkills(List<String> missingSkills){
-        this.missingSkills = missingSkills;
+    public List<String> getMatchedSkills() {
+        return matchedSkills;
     }
 
-    public List<String> getMissingSkills(){
-        return missingSkills;
+    public void setMatchedSkills(
+        List<String> matchedSkills
+    ) {
+        this.matchedSkills = matchedSkills;
     }
 
-    public void setRecommendedLearning(List<String> recommendedLearning){
-        this.recommendedLearning = recommendedLearning;
+    public List<String> getMissingTechnicalSkills() {
+        return missingTechnicalSkills;
     }
 
-    public List<String> getRecommendedLearning(){
-        return recommendedLearning;
+    public void setMissingTechnicalSkills(
+        List<String> missingTechnicalSkills
+    ) {
+        this.missingTechnicalSkills =
+        missingTechnicalSkills;
     }
 
-    public void setSummary(String summary){
-        this.summary = summary;
+    public List<String> getMissingSoftSkills() {
+        return missingSoftSkills;
     }
 
-    public String getSummary(){
-        return summary;
+    public void setMissingSoftSkills(
+        List<String> missingSoftSkills
+    ) {
+        this.missingSoftSkills =
+        missingSoftSkills;
     }
-    
+
+    public List<String> getTopPrioritySkills() {
+        return topPrioritySkills;
+    }
+
+    public void setTopPrioritySkills(
+        List<String> topPrioritySkills
+    ) {
+        this.topPrioritySkills =
+        topPrioritySkills;
+    }
 }

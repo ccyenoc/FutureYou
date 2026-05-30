@@ -30,6 +30,7 @@ type ChatMessage = {
     text?: string
     jobs?: any[]
     skillGap?: any
+    courses?: any[]
   }
 
 export default function ChatbotSection({career, analysis} : ChatbotSectionProps) {
@@ -126,11 +127,39 @@ export default function ChatbotSection({career, analysis} : ChatbotSectionProps)
          setShowJobModal(true)
          return
 
-      case "course":
-        url = `http://localhost:8080/career/courses?career=${career.title}`
-        break
+    case "course":{
 
-     case "skills":
+        const response = await fetch(
+            "http://localhost:8080/courses",
+            {
+              method:"POST",
+
+              headers:{
+                "Content-Type":
+                "application/json"
+              },
+
+              body:JSON.stringify({
+                career: career.title
+              })
+            }
+          )
+
+        const data =
+          await response.json()
+
+        setMessages(prev => [
+          ...prev,
+          {
+            role:"bot",
+            courses:data.courses
+          }
+        ])
+
+        return
+      }
+
+     case "skills":{
 
         const response = await fetch(
           "http://localhost:8080/skill-gap",
@@ -162,8 +191,9 @@ export default function ChatbotSection({career, analysis} : ChatbotSectionProps)
         ])
 
         return
+      }
 
-      case "roadmap":
+      case "roadmap": 
         url = `http://localhost:8080/career/roadmap?career=${career.title}`
         break
     }
@@ -527,6 +557,42 @@ export default function ChatbotSection({career, analysis} : ChatbotSectionProps)
               </div>
 
             )}
+            {msg.courses?.map((course, i) => (
+              <a
+                key={i}
+                href={course.url}
+                target="_blank"
+                rel="noreferrer"
+                className="
+                  block
+                  rounded-xl
+                  border
+                  border-white/10
+                  bg-white/5
+                  p-4
+                  hover:border-violet-500/40
+                "
+              >
+
+                <h4 className="font-semibold text-white">
+                  {course.title}
+                </h4>
+
+                <p className="text-sm text-violet-300 mt-1">
+                  {course.provider}
+                </p>
+
+                <p className="text-sm text-zinc-300 mt-3">
+                  {course.description}
+                </p>
+
+                <p className="text-xs text-violet-400 mt-3">
+                  Open Course →
+                </p>
+
+              </a>
+
+            ))}
 
           </div>
 

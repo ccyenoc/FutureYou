@@ -7,26 +7,22 @@ import org.springframework.web.client.RestTemplate;
 import com.futureyou.backend.dto.TavilyRequest;
 
 @Service
-
-public class TavilyService{
+public class TavilyService {
 
     @Value("${tavily.api.key}")
     private String apiKey;
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public String searchJobs(String query) {
+    public String search(String query) {
+        System.out.println(
+    "Tavily Key = " + apiKey
+);
 
-    String url =
-        "https://api.tavily.com/search";
+        String url = "https://api.tavily.com/search";
 
-    TavilyRequest request = new TavilyRequest( query, apiKey ,15 );
+        TavilyRequest request = new TavilyRequest(query, apiKey, 10 );
 
-    return restTemplate.postForObject(
-        url,
-        request,
-        String.class
-    );
+        return restTemplate.postForObject( url, request, String.class );
+    }
 }
-}
-

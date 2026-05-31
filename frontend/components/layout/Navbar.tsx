@@ -3,13 +3,23 @@
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Moon, ChevronDown } from "lucide-react"
+import {useState, useEffect} from "react"
 
 export default function Navbar() {
 
   const router = useRouter()
 
-  // later replace with actual auth state
-  const isLoggedIn = false
+  const [user, setUser] = useState<any>(null)
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user")
+
+    if (storedUser) {
+      setUser( JSON.parse(storedUser))
+    }
+  }, [])
+
+  const isLoggedIn = !!user
 
   return (
     <header

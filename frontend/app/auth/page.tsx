@@ -4,10 +4,91 @@ import { useState } from "react"
 
 export default function AuthPage() {
 
-  const [mode, setMode] =
-    useState<"login" | "register">(
-      "login"
-    )
+  const [mode, setMode] = useState<"login" | "register">( "login")
+  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
+
+  const register = async () => {
+    try {
+
+        setLoading(true)
+        setError("")
+
+        const response = await fetch(
+            "http://localhost:8080/auth/register",
+            {
+                method: "POST",
+
+                headers: {
+                "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                username,
+                email,
+                password
+                })
+            }
+            )
+
+            const data = await response.json()
+
+            if (!response.ok) {
+                throw new Error( data.message || "Registration failed")
+            }
+
+            localStorage.setItem( "user", JSON.stringify(data))
+            window.location.href = "/"
+        }
+        catch (err: any) {
+            setError(err.message)
+        }
+        finally {
+            setLoading(false)
+        }
+    }
+
+    const login = async () => {
+        try {
+            setLoading(true)
+            setError("")
+
+            const response = await fetch(
+            "http://localhost:8080/auth/login",
+            {
+                method: "POST",
+
+                headers: {
+                "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                email,
+                password
+                })
+            }
+            )
+
+            const data = await response.json()
+
+            if (!response.ok) {
+                throw new Error( data.message || "Login failed" )
+            }
+
+            localStorage.setItem( "user", JSON.stringify(data) )
+            window.location.href = "/"
+
+        }
+        catch (err: any) {
+            setError(err.message)
+        }
+        finally {
+            setLoading(false)
+        }
+    }
 
   return (
     <main
@@ -155,90 +236,71 @@ export default function AuthPage() {
         <div className="mt-8">
 
           {mode === "register" && (
-
             <input
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               placeholder="Username"
               className="
               w-full
-
               mb-4
-
               px-5
               py-4
-
               rounded-2xl
-
               bg-white/[0.04]
-
               border
               border-white/10
-
               text-white
               "
             />
-
           )}
 
           <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
             className="
             w-full
-
             mb-4
-
             px-5
             py-4
-
             rounded-2xl
-
             bg-white/[0.04]
-
             border
             border-white/10
-
             text-white
             "
           />
 
           <input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             type="password"
             placeholder="Password"
             className="
             w-full
-
             px-5
             py-4
-
             rounded-2xl
-
             bg-white/[0.04]
-
             border
             border-white/10
-
             text-white
             "
           />
 
           <button
+            onClick={ mode === "login" ? login : register }
             className="
             w-full
-
             mt-6
-
             py-4
-
             rounded-2xl
-
             bg-gradient-to-r
             from-violet-600
             to-purple-500
-
             text-white
             font-semibold
-
             hover:scale-[1.02]
-
             transition
             "
           >
@@ -254,13 +316,9 @@ export default function AuthPage() {
         <div
           className="
           mt-8
-
           p-5
-
           rounded-2xl
-
           bg-violet-500/10
-
           border
           border-violet-500/20
           "
@@ -277,10 +335,8 @@ export default function AuthPage() {
           <ul
             className="
             mt-3
-
             text-sm
             text-zinc-400
-
             space-y-2
             "
           >

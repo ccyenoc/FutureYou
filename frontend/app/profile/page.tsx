@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 
 import Navbar from "@/components/layout/Navbar"
@@ -10,11 +10,24 @@ export default function ProfilePage() {
 
   const router = useRouter()
 
-  const [username, setUsername] = useState("Chin Yiu Ern")
+  useEffect(() => {
 
-  const [email, setEmail] = useState("example@gmail.com")
+    const storedUser =
+        localStorage.getItem("user")
 
+    if (storedUser) {
+        const user = JSON.parse(storedUser)
+
+        setUsername( user.username )
+        setEmail( user.email )
+    }
+
+    }, [])
+
+  const [username, setUsername] = useState("User")
+  const [email, setEmail] = useState("Email")
   const [password, setPassword] = useState("")
+  const [profileImage, setProfileImage] = useState<string | null>(null)
 
   const interviewHistory = [
     {
@@ -37,16 +50,72 @@ export default function ProfilePage() {
     }
   ]
 
-  const handleSave = () => {
+  const handleSave = async () => {
 
-    console.log({
-      username,
-      email,
-      password
-    })
+        try {
 
-    alert("Profile updated!")
-  }
+            const storedUser =
+            JSON.parse(
+                localStorage.getItem("user") || "{}"
+            )
+
+            const response =
+            await fetch(
+                `http://localhost:8080/users/${storedUser.userId}`,
+                {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type":
+                    "application/json"
+                },
+
+                body: JSON.stringify({
+                    username,
+                    email,
+                    password
+                })
+                }
+            )
+
+            if (!response.ok) {
+
+            throw new Error(
+                "Failed to update profile"
+            )
+
+            }
+
+            const updatedUser =
+            await response.json()
+
+            localStorage.setItem(
+            "user",
+            JSON.stringify({
+                ...storedUser,
+                username:
+                updatedUser.username,
+                email:
+                updatedUser.email
+            })
+            )
+
+            alert(
+            "Profile updated successfully!"
+            )
+
+        }
+        catch (error) {
+
+            console.error(error)
+
+            alert(
+            "Update failed"
+            )
+
+        }
+
+        }
 
   return (
 
@@ -116,23 +185,60 @@ export default function ProfilePage() {
             <div>
 
               <img
-                src="https://placehold.co/150"
+                src={
+                    profileImage ||
+                    "https://placehold.co/150"
+                }
                 alt="Profile"
                 className="
-                  w-36
-                  h-36
-                  rounded-full
-                  object-cover
-                  border
-                  border-white/20
+                    w-36
+                    h-36
+                    rounded-full
+                    object-cover
+                    border
+                    border-white/20
                 "
-              />
+                />
 
               <input
+                id="profile-upload"
                 type="file"
-                className="mt-4"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+
+                    const file =
+                    e.target.files?.[0]
+
+                    if (!file) return
+
+                    const imageUrl =
+                    URL.createObjectURL(file)
+
+                    setProfileImage(imageUrl)
+
+                }}
               />
 
+              <label
+                htmlFor="profile-upload"
+                className="
+                    mt-4
+                    inline-block
+                    px-5
+                    py-2
+                    rounded-xl
+                    bg-violet-600
+                    hover:bg-violet-700
+                    text-white
+                    text-sm
+                    font-medium
+                    cursor-pointer
+                    transition
+                "
+                >
+                Upload Photo
+                </label>
             </div>
 
             <div

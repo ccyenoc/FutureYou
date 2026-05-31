@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.futureyou.backend.dto.ProfileAnalysisResponse;
 import com.futureyou.backend.prompt.ProfileAnalysisPrompt;
@@ -31,34 +32,12 @@ public class ProfileAnalysisService{
 
             resumeText;
 
-            System.out.println(
-    "Resume Prompt Length = "
-    + prompt.length()
-);
-
-System.out.println(
-    "Resume Text Length = "
-    + resumeText.length()
-);
-
 System.out.println(
     "Sending resume to Gemini..."
 );
 
-            String response =
-            geminiService.generate(prompt)
-            .replace("```json", "")
-            .replace("```", "")
-            .trim();
-
-            int start = response.indexOf("{");
-            int end = response.lastIndexOf("}");
-
-            if(start != -1 && end != -1){
-                response =
-                response.substring(start, end + 1);
-            }
-
+            String response = geminiService.generate(prompt).trim();
+            
             System.out.println(
                 "Gemini Response:\n"
                 +
@@ -73,10 +52,17 @@ System.out.println(
 
                 throw new RuntimeException("Gemini did not return valid JSON");
             }
+        ObjectMapper mapper = new ObjectMapper();
 
-            ObjectMapper mapper = new ObjectMapper();
+        System.out.println("Gemini Response:");
+        System.out.println(response);
 
-            return mapper.readValue( response, ProfileAnalysisResponse.class);
+        JsonNode node = mapper.readTree(response);
+
+        return mapper.treeToValue(
+            node,
+            ProfileAnalysisResponse.class
+        );
 
         }
         catch(Exception err) {
@@ -90,7 +76,8 @@ System.out.println(
                 List.of(),
                 List.of(),
                 List.of(),
-                List.of()
+                List.of(),
+                "Unknown"
             );
 
         }

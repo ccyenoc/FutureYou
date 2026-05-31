@@ -44,7 +44,13 @@ export default function ResumeSection({setProfile} : ResumeSectionProps) {
       console.log("File Uploaded!");
       const data = await response.json()
 
-      console.log(data)
+      localStorage.setItem(
+        "resumeText",
+        data.resumeText
+      )
+
+      console.log("Data : ",data)
+      console.log("Resume Text : ",data.resumeText)
 
       setProfile(data)
 

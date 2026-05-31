@@ -15,9 +15,7 @@ public class JobService {
 
     private final JSearchService jSearchService;
 
-    public JobService(
-        JSearchService jSearchService
-    ) {
+    public JobService( JSearchService jSearchService) {
         this.jSearchService = jSearchService;
     }
 
@@ -50,42 +48,27 @@ public class JobService {
                 + response
             );
 
-            ObjectMapper mapper =
-                new ObjectMapper();
+            ObjectMapper mapper = new ObjectMapper();
 
-            JsonNode root =
-                mapper.readTree(response);
+            JsonNode root = mapper.readTree(response);
 
-            JsonNode jobsNode =
-            root.path("data")
-                .path("jobs");
+            JsonNode jobsNode = root.path("data");
 
-            List<JobOpening> jobs =
-                new ArrayList<>();
+            List<JobOpening> jobs = new ArrayList<>();
 
             if (jobsNode.isArray()) {
 
                  for (JsonNode job : jobsNode) {
 
-                    String title =
-                        job.path("job_title")
-                            .asText();
+                    String title = job.path("job_title").asText();
 
-                    String company =
-                        job.path("employer_name")
-                            .asText("Unknown");
+                    String company = job.path("employer_name").asText("Unknown");
 
-                    String location =
-                        job.path("job_city")
-                            .asText(region);
+                    String location = job.path("job_city").asText(region);
 
-                    String type =
-                        job.path("job_employment_type")
-                            .asText(jobType);
+                    String type = job.path("job_employment_type").asText(jobType);
 
-                    String url =
-                        job.path("job_apply_link")
-                            .asText();
+                    String url = job.path("job_apply_link").asText();
 
                     jobs.add(
                         new JobOpening(
@@ -99,14 +82,9 @@ public class JobService {
                 }
             }
 
-            System.out.println(
-                "Jobs Found = "
-                + jobs.size()
-            );
+            System.out.println( "Jobs Found = " + jobs.size());
 
-            return new JobsResponse(
-                jobs
-            );
+            return new JobsResponse( jobs );
 
         }
         catch (Exception e) {

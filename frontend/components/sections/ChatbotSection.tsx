@@ -12,6 +12,8 @@ import {
 
 import { useState } from "react"
 
+import { useRouter } from "next/navigation"
+
 type Career = {
   title: string
   reasoning: string
@@ -35,15 +37,12 @@ type ChatMessage = {
 
 export default function ChatbotSection({career, analysis} : ChatbotSectionProps) {
 
-
+  const router = useRouter()
   const [message, setMessage] = useState("")
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [loading, setLoading] = useState(false)
-
   const [jobType, setJobType] = useState("Full Time")
-
   const [showJobModal, setShowJobModal] = useState(false)
-
   const [region, setRegion] = useState("")
 
   const sendMessage = async () => {
@@ -124,13 +123,54 @@ export default function ChatbotSection({career, analysis} : ChatbotSectionProps)
     switch(action){
 
       case "jobs":
-         setShowJobModal(true)
-         return
+        setShowJobModal(true)
+        return
 
-    case "course":{
+      case "interview":
+        router.push(
+          `/interview?career=${encodeURIComponent(
+            career.title
+          )}`
+        )
 
-        const response = await fetch(
-            "http://localhost:8080/courses",
+        return
+
+      case "course":{
+
+          const response = await fetch(
+              "http://localhost:8080/courses",
+              {
+                method:"POST",
+
+                headers:{
+                  "Content-Type":
+                  "application/json"
+                },
+
+                body:JSON.stringify({
+                  career: career.title
+                })
+              }
+            )
+
+          const data =
+            await response.json()
+
+          setMessages(prev => [
+            ...prev,
+            {
+              role:"bot",
+              courses:data.courses
+            }
+          ])
+
+          return
+        }
+
+      case "skills":{
+
+          const response = await fetch(
+            "http://localhost:8080/skill-gap",
             {
               method:"POST",
 
@@ -140,78 +180,45 @@ export default function ChatbotSection({career, analysis} : ChatbotSectionProps)
               },
 
               body:JSON.stringify({
-                career: career.title
+                career: career.title,
+                skills: analysis.skills,
+                strengths: analysis.strengths
               })
             }
           )
 
-        const data =
-          await response.json()
+          const data =
+            await response.json()
 
-        setMessages(prev => [
-          ...prev,
-          {
-            role:"bot",
-            courses:data.courses
-          }
-        ])
+          setMessages(prev => [
+            ...prev,
+            {
+              role:"bot",
+              skillGap:data
+            }
+          ])
 
-        return
+          return
+        }
+
       }
 
-     case "skills":{
+      const response = await fetch(url)
 
-        const response = await fetch(
-          "http://localhost:8080/skill-gap",
-          {
-            method:"POST",
+      const data = await response.json()
 
-            headers:{
-              "Content-Type":
-              "application/json"
-            },
-
-            body:JSON.stringify({
-              career: career.title,
-              skills: analysis.skills,
-              strengths: analysis.strengths
-            })
-          }
-        )
-
-        const data =
-          await response.json()
-
-        setMessages(prev => [
-          ...prev,
-          {
-            role:"bot",
-            skillGap:data
-          }
-        ])
-
-        return
-      }
-
-      case "roadmap": 
-        url = `http://localhost:8080/career/roadmap?career=${career.title}`
-        break
+      setMessages(prev => [
+        ...prev,
+        {
+          role:"bot",
+          text:data.message
+        }
+      ])
     }
 
-    const response = await fetch(url)
-
-    const data = await response.json()
-
-    setMessages(prev => [
-      ...prev,
-      {
-        role:"bot",
-        text:data.message
-      }
-    ])
-  }
-
   const searchJobs = async () => {
+
+    
 
   const response = await fetch(
     "http://localhost:8080/jobs",
@@ -231,22 +238,26 @@ export default function ChatbotSection({career, analysis} : ChatbotSectionProps)
     }
   )
 
-  const data = await response.json()
+  
+
+ const data = await response.json()
+ 
+
+  console.log("JOB RESPONSE : ",data)
 
   setMessages(prev => [
-      ...prev,
-      {
-        role: "bot",
-        jobs: data.jobs
-      }
-    ])
-
-  console.log(data)
+    ...prev,
+    {
+      role: "bot",
+      jobs: data.jobs
+    }
+  ])
 
   setShowJobModal(false)
 }
 
   return (
+    
 
     <div
       className="
@@ -342,6 +353,15 @@ export default function ChatbotSection({career, analysis} : ChatbotSectionProps)
                 `${career.title} Jobs`,
                 subtitle:
                 "Jobs matching your future"
+              },
+
+              {
+                id:"interview",
+                icon: Sparkles,
+                title:
+                `${career.title} Mock Interview`,
+                subtitle:
+                "Practice a realistic interview"
               },
 
             ].map((item) => (

@@ -19,16 +19,12 @@ public class JobOpeningController {
 
     private final JobService jobService;
 
-    public JobOpeningController(
-            JobService jobService
-    ) {
+    public JobOpeningController( JobService jobService) {
         this.jobService = jobService;
     }
 
     @PostMapping
-    public JobsResponse getJobs(
-            @RequestBody JobRequest request
-    ) {
+    public JobsResponse getJobs( @RequestBody JobRequest request ) {
 
         return jobService.getJobs(
                 request.getCareer(),

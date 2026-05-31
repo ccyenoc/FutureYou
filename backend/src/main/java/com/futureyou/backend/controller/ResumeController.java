@@ -28,7 +28,12 @@ public class ResumeController{
     public ProfileAnalysisResponse uploadResume(@RequestParam("file") MultipartFile file){
         String extractedText = resumeService.extractText(file);
 
-        return profileAnalysisService.analyzeProfile(extractedText);
+        ProfileAnalysisResponse response = profileAnalysisService.analyzeProfile(extractedText);
+
+        response.setResumeText(extractedText);
+
+
+        return response;
     }
 
 }

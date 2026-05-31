@@ -1,5 +1,8 @@
 package com.futureyou.backend.service;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -23,41 +26,99 @@ public class JSearchService {
         String region
     ) {
 
-        String query =
-            career + " " + jobType;
+        try {
 
-        String url =
-            "https://jsearch.p.rapidapi.com/search-v2"
-            + "?query=" + query.replace(" ", "%20")
-            + "&page=1"
-            + "&num_pages=1"
-            + "&country=my"
-            + "&date_posted=all";
+            // Normalize career titles
+            String query = career;
 
-        HttpHeaders headers =
-            new HttpHeaders();
+            if (career.toLowerCase().contains("full-stack")) {
+                query = "Full Stack Developer";
+            }
+            else if (career.toLowerCase().contains("mobile")) {
+                query = "Mobile Developer";
+            }
+            else if (career.toLowerCase().contains("ai")) {
+                query = "Software Engineer";
+            }
 
-        headers.set(
-            "X-RapidAPI-Key",
-            apiKey
-        );
+            // Country mapping
+            String country = "my";
 
-        headers.set(
-            "X-RapidAPI-Host",
-            "jsearch.p.rapidapi.com"
-        );
+            if (region != null && !region.isBlank()) {
 
-        HttpEntity<String> entity =
-            new HttpEntity<>(headers);
+                if (region.equalsIgnoreCase("Singapore")) {
+                    country = "sg";
+                }
+                else if (
+                    region.equalsIgnoreCase("United States")
+                    || region.equalsIgnoreCase("USA")
+                ) {
+                    country = "us";
+                }
+                else if (
+                    region.equalsIgnoreCase("United Kingdom")
+                    || region.equalsIgnoreCase("UK")
+                ) {
+                    country = "gb";
+                }
+            }
 
-        ResponseEntity<String> response =
-            restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                entity,
-                String.class
+            String encodedQuery =
+                URLEncoder.encode(
+                    query,
+                    StandardCharsets.UTF_8
+                );
+
+            String url =
+                "https://jsearch.p.rapidapi.com/search"
+                + "?query=" + encodedQuery
+                + "&page=1"
+                + "&num_pages=1"
+                + "&country=" + country
+                + "&date_posted=all";
+
+            System.out.println("JSEARCH URL:");
+            System.out.println(url);
+
+            HttpHeaders headers =
+                new HttpHeaders();
+
+            headers.set(
+                "X-RapidAPI-Key",
+                apiKey
             );
 
-        return response.getBody();
+            headers.set(
+                "X-RapidAPI-Host",
+                "jsearch.p.rapidapi.com"
+            );
+
+            HttpEntity<String> entity =
+                new HttpEntity<>(headers);
+
+            ResponseEntity<String> response =
+                restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    entity,
+                    String.class
+                );
+
+            System.out.println("RAW JSEARCH RESPONSE:");
+            System.out.println(response.getBody());
+
+            return response.getBody();
+
+        }
+        catch (Exception e) {
+
+            e.printStackTrace();
+
+            return """
+            {
+              "data":[]
+            }
+            """;
+        }
     }
 }

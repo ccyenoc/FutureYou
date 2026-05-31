@@ -121,10 +121,7 @@ export default function Home() {
           >
 
             {currentCareer && (
-              <ChatbotSection
-                career={currentCareer}
-                analysis={profile}
-              />
+              <ChatbotSection career={currentCareer} analysis={profile} />
             )}
 
           </div>

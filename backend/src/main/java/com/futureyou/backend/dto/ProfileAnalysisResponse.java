@@ -16,6 +16,8 @@ public class ProfileAnalysisResponse {
 
     private List<CareerRecommendation> careers;
 
+    private String resumeText;
+
     public ProfileAnalysisResponse() {
     }
 
@@ -25,7 +27,8 @@ public class ProfileAnalysisResponse {
         List<String> strengths,
         List<String> interests,
         List<String> workStyle,
-        List<CareerRecommendation> careers
+        List<CareerRecommendation> careers,
+        String resumeText
     ) {
         this.domain = domain;
         this.skills = skills;
@@ -33,6 +36,7 @@ public class ProfileAnalysisResponse {
         this.interests = interests;
         this.workStyle = workStyle;
         this.careers = careers;
+        this.resumeText = resumeText;
     }
 
     public String getDomain() {
@@ -81,6 +85,14 @@ public class ProfileAnalysisResponse {
 
     public void setCareers(List<CareerRecommendation> careers) {
         this.careers = careers;
+    }
+
+    public void setResumeText(String resumeText){
+        this.resumeText = resumeText;
+    }
+
+    public String getResumeText(){
+        return resumeText;
     }
 
 }

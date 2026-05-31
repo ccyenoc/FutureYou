@@ -336,8 +336,7 @@ console.log(
         }
       )
 
-    const data =
-      await response.json()
+    const data = await response.json()
 
     return data
   }
@@ -374,6 +373,103 @@ console.log(
   }
 
 }, [started])
+
+  const downloadReport = () => {
+
+    let report = `
+  FUTUREYOU INTERVIEW REPORT
+
+  Career:
+  ${career}
+
+  ========================================
+
+  OVERALL SCORE
+  ========================================
+
+  Overall Score: ${analysis.overallScore}
+  Technical Score: ${analysis.technicalScore}
+  Communication Score: ${analysis.communicationScore}
+  Confidence Score: ${analysis.confidenceScore}
+
+  ========================================
+
+  STRENGTHS
+  ========================================
+
+  ${analysis.strengths.join("\n")}
+
+  ========================================
+
+  WEAKNESSES
+  ========================================
+
+  ${analysis.weaknesses.join("\n")}
+
+  ========================================
+
+  SUGGESTIONS
+  ========================================
+
+  ${analysis.suggestions.join("\n")}
+
+  ========================================
+
+  QUESTION REVIEW
+  ========================================
+
+  `
+
+    analysis.reviews?.forEach(
+      (
+        review: any,
+        index: number
+      ) => {
+
+        report += `
+
+  Question ${index + 1}
+
+  Question:
+  ${review.question}
+
+  Your Answer:
+  ${review.answer}
+
+  Feedback:
+  ${review.feedback}
+
+  Suggested Answer:
+  ${review.suggestedAnswer}
+
+  ----------------------------------------
+
+  `
+      }
+    )
+
+    const blob = new Blob(
+      [report],
+      {
+        type: "text/plain"
+      }
+    )
+
+    const url =
+      URL.createObjectURL(blob)
+
+    const a =
+      document.createElement("a")
+
+    a.href = url
+
+    a.download =
+      "FutureYou-Interview-Report.txt"
+
+    a.click()
+
+    URL.revokeObjectURL(url)
+  }
 
   return (
   <div className="min-h-screen bg-black text-white">
@@ -597,6 +693,24 @@ console.log(
             Interview Analysis
           </h2>
 
+          <div className="mb-6">
+
+            <button
+              onClick={downloadReport}
+              className="
+                bg-violet-600
+                hover:bg-violet-700
+                px-5
+                py-3
+                rounded-xl
+                font-semibold
+              "
+            >
+              📄 Download Report
+            </button>
+
+          </div>
+
           <div
             className="
               grid
@@ -685,17 +799,106 @@ console.log(
                   </p>
                 )
               )}
+
+            </div>
+
+            </div> 
+
+            {analysis.reviews?.length > 0 && (
+
+          <div className="mt-8">
+
+            <h2 className="text-2xl font-bold mb-4">
+              ⭐ Question Review
+            </h2>
+
+            <div className="space-y-6">
+
+              {analysis.reviews.map(
+                (review: any, index: number) => (
+
+                  <div
+                    key={index}
+                    className="
+                      bg-zinc-900
+                      rounded-2xl
+                      p-6
+                      border
+                      border-white/10
+                    "
+                  >
+
+                  <h3 className="font-bold text-lg mb-4">
+                    Question {index + 1}
+                  </h3>
+
+                  <div className="mb-5">
+
+                    <p className="text-violet-400 font-semibold mb-2">
+                      Question
+                    </p>
+
+                    <p className="text-zinc-300">
+                      {review.question}
+                    </p>
+
+                  </div>
+
+                  <div className="mb-5">
+
+                    <p className="text-blue-400 font-semibold mb-2">
+                      Your Answer
+                    </p>
+
+                    <p className="text-zinc-300 whitespace-pre-line">
+                      {review.answer}
+                    </p>
+
+                  </div>
+
+                  <div className="mb-5">
+
+                    <p className="text-yellow-400 font-semibold mb-2">
+                      AI Feedback
+                    </p>
+
+                    <p className="text-zinc-300 whitespace-pre-line">
+                      {review.feedback}
+                    </p>
+
+                  </div>
+
+                  <div>
+
+                    <p className="text-green-400 font-semibold mb-2">
+                      ⭐ Suggested Strong Answer
+                    </p>
+
+                    <p className="text-zinc-300 whitespace-pre-line">
+                      {review.suggestedAnswer}
+                    </p>
+
+                  </div>
+
+                  </div>
+
+                )
+              )}
+
             </div>
 
           </div>
 
-        </div>
+        )}
+
+          </div>
 
       )}
 
     </main>
 
   </div>
+  
 )
 }
 

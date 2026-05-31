@@ -18,6 +18,8 @@ public class InterviewEvaluationResponse {
 
     private List<String> suggestions;
 
+    private List<QuestionReview> reviews;
+
     public InterviewEvaluationResponse() {
     }
 
@@ -28,7 +30,8 @@ public class InterviewEvaluationResponse {
         int confidenceScore,
         List<String> strengths,
         List<String> weaknesses,
-        List<String> suggestions
+        List<String> suggestions,
+        List<QuestionReview> reviews
     ) {
         this.overallScore = overallScore;
         this.technicalScore = technicalScore;
@@ -37,6 +40,7 @@ public class InterviewEvaluationResponse {
         this.strengths = strengths;
         this.weaknesses = weaknesses;
         this.suggestions = suggestions;
+        this.reviews = reviews;
     }
 
     public int getOverallScore() {
@@ -93,5 +97,13 @@ public class InterviewEvaluationResponse {
 
     public void setSuggestions(List<String> suggestions) {
         this.suggestions = suggestions;
+    }
+
+    public List<QuestionReview> getQuestionReview() {
+        return reviews;
+    }
+
+    public void setQuestionReview(List<QuestionReview> reviews) {
+        this.reviews = reviews;
     }
 }

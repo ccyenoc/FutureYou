@@ -6,10 +6,13 @@ import {
 } from "lucide-react"
 
 import {useState} from "react";
+import { useRouter } from "next/navigation"
 
 
 export default function Navbar() {
+  const router = useRouter()
   const [profile, setProfile] = useState("");
+  
   return (
     <header
       className="
@@ -186,6 +189,7 @@ export default function Navbar() {
           >
 
             <div
+              onClick={() => router.push("/profile")}
               className="
               w-11
               h-11
@@ -198,6 +202,11 @@ export default function Navbar() {
               to-orange-500
 
               shadow-lg
+
+              cursor-pointer
+              hover:scale-105
+
+              transition
               "
             />
 

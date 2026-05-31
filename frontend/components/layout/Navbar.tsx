@@ -1,18 +1,16 @@
 "use client"
 
-import {
-  Moon,
-  ChevronDown,
-} from "lucide-react"
-
-import {useState} from "react";
+import Link from "next/link"
 import { useRouter } from "next/navigation"
-
+import { Moon, ChevronDown } from "lucide-react"
 
 export default function Navbar() {
+
   const router = useRouter()
-  const [profile, setProfile] = useState("");
-  
+
+  // later replace with actual auth state
+  const isLoggedIn = false
+
   return (
     <header
       className="
@@ -24,7 +22,6 @@ export default function Navbar() {
       border-white/5
 
       bg-[rgba(6,8,22,.72)]
-
       backdrop-blur-2xl
       "
     >
@@ -43,10 +40,14 @@ export default function Navbar() {
       >
         {/* LEFT */}
 
-        <div className="flex items-center gap-4">
-
-          {/* Ghost Logo */}
-
+        <Link
+          href="/"
+          className="
+          flex
+          items-center
+          gap-4
+          "
+        >
           <div
             className="
             w-12
@@ -69,15 +70,11 @@ export default function Navbar() {
             👻
           </div>
 
-          {/* Brand */}
-
           <div>
-
             <h1
               className="
               text-[30px]
               font-bold
-
               tracking-[-1px]
               "
             >
@@ -108,26 +105,8 @@ export default function Navbar() {
             >
               Meet your future self
             </p>
-
           </div>
-
-        </div>
-
-        {/* CENTER */}
-
-        <div
-          className="
-          hidden
-          lg:flex
-
-          items-center
-          gap-8
-
-          text-sm
-          "
-        >
-
-        </div>
+        </Link>
 
         {/* RIGHT */}
 
@@ -138,7 +117,6 @@ export default function Navbar() {
           gap-5
           "
         >
-
           {/* Theme */}
 
           <button
@@ -168,57 +146,79 @@ export default function Navbar() {
             />
           </button>
 
+          {/* Guest User */}
 
-          {/* Profile */}
-
-          <button
-            className="
-            flex
-            items-center
-            gap-3
-
-            px-2
-            py-1
-
-            rounded-full
-
-            hover:bg-white/[0.04]
-
-            transition
-            "
-          >
-
-            <div
-              onClick={() => router.push("/profile")}
+          {!isLoggedIn && (
+            <button
+              onClick={() => router.push("/auth")}
               className="
-              w-11
-              h-11
+              px-5
+              py-2.5
 
               rounded-full
 
-              bg-gradient-to-br
+              bg-gradient-to-r
+              from-violet-600
+              to-purple-500
 
-              from-amber-300
-              to-orange-500
+              text-white
+              font-medium
 
-              shadow-lg
-
-              cursor-pointer
               hover:scale-105
+              hover:shadow-[0_0_25px_rgba(139,92,246,.5)]
 
               transition
               "
-            />
+            >
+              Login / Sign Up
+            </button>
+          )}
 
-            <ChevronDown
-              size={18}
-              className="text-zinc-400"
-            />
+          {/* Logged In User */}
 
-          </button>
+          {isLoggedIn && (
+            <button
+              onClick={() => router.push("/profile")}
+              className="
+              flex
+              items-center
+              gap-3
+
+              px-2
+              py-1
+
+              rounded-full
+
+              hover:bg-white/[0.04]
+
+              transition
+              "
+            >
+              <div
+                className="
+                w-11
+                h-11
+
+                rounded-full
+
+                bg-gradient-to-br
+                from-amber-300
+                to-orange-500
+
+                shadow-lg
+
+                cursor-pointer
+                "
+              />
+
+              <ChevronDown
+                size={18}
+                className="text-zinc-400"
+              />
+            </button>
+          )}
 
         </div>
-
       </div>
     </header>
   )

@@ -11,14 +11,33 @@ import jakarta.persistence.Table;
 public class User {
 
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String username;
 
     private String email;
 
-    public User() {}
+    private String password;
+
+    private String profilePictureUrl;
+
+    public User() {
+    }
+
+    public User(
+            Long id,
+            String username,
+            String email,
+            String password,
+            String profilePictureUrl
+    ) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.profilePictureUrl = profilePictureUrl;
+    }
 
     public Long getId() {
         return id;
@@ -32,7 +51,7 @@ public class User {
         return username;
     }
 
-    public void setUsername( String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
@@ -40,7 +59,23 @@ public class User {
         return email;
     }
 
-    public void setEmail( String email ) {
+    public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getProfilePictureUrl() {
+        return profilePictureUrl;
+    }
+
+    public void setProfilePictureUrl(String profilePictureUrl) {
+        this.profilePictureUrl = profilePictureUrl;
     }
 }

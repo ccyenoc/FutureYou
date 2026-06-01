@@ -1,5 +1,7 @@
 package com.futureyou.backend.service;
 
+import java.time.LocalDateTime;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
@@ -7,6 +9,9 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.futureyou.backend.entity.Resume;
+import com.futureyou.backend.entity.User;
+import com.futureyou.backend.repository.ResumeRepository;
 import com.google.cloud.vision.v1.AnnotateImageRequest;
 import com.google.cloud.vision.v1.BatchAnnotateImagesResponse;
 import com.google.cloud.vision.v1.Feature;
@@ -16,9 +21,16 @@ import com.google.cloud.vision.v1.TextAnnotation;
 import com.google.protobuf.ByteString;
 
 
+
 @Service
 
 public class ResumeService{
+
+    private final ResumeRepository resumeRepository;
+
+    public ResumeService(ResumeRepository resumeRepository){
+        this.resumeRepository = resumeRepository;
+    }
 
     public String extractText(MultipartFile file){
         String fileType = file.getContentType();
@@ -115,6 +127,21 @@ public class ResumeService{
             return "Failed to extract Image text";
         }
     }
+
+    public Resume saveResume( User user,MultipartFile file, String extractedText) {
+
+    Resume resume = new Resume();
+
+    resume.setUser(user);
+
+    resume.setFileName( file.getOriginalFilename() );
+
+    resume.setExtractedText( extractedText );
+
+    resume.setUploadedAt( LocalDateTime.now() );
+
+    return resumeRepository.save( resume );
+}
 
     
 }

@@ -1,9 +1,12 @@
 package com.futureyou.backend.entity;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,6 +24,12 @@ public class User {
     private String password;
 
     private String profilePictureUrl;
+
+    @OneToMany(mappedBy = "user")
+    private List<Interview> interviews;
+
+    @OneToMany(mappedBy = "user")
+    private List<Resume> resumes;
 
     public User() {
     }

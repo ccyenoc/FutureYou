@@ -31,29 +31,41 @@ export default function ResumeSection({setProfile} : ResumeSectionProps) {
 
     if(!file) return
 
+    const user = typeof window !== "undefined" ? JSON.parse( localStorage.getItem("user") || "null" ) : null
+    
+    let response
+
     try{
       setLoading(true)
+      
+      if (user) {
 
-      const response = await fetch("http://localhost:8080/resume/upload",
-        {
-          method:"POST",
-          body : formData,
-        }
-      )
+        formData.append( "userId", user.userId.toString())
 
-      console.log("File Uploaded!");
+        response = await fetch(
+          "http://localhost:8080/resume/upload-save",
+          {
+            method: "POST",
+            body: formData
+          }
+        )
+
+      } else {
+
+        response = await fetch(
+          "http://localhost:8080/resume/upload",
+          {
+            method: "POST",
+            body: formData
+          }
+        )
+
+      }
       const data = await response.json()
 
-      localStorage.setItem(
-        "resumeText",
-        data.resumeText
-      )
-
-      console.log("Data : ",data)
-      console.log("Resume Text : ",data.resumeText)
+      localStorage.setItem( "resumeText", data.resumeText )
 
       setProfile(data)
-
     }
     catch(err){
       console.log(err)

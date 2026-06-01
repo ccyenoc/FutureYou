@@ -1,4 +1,6 @@
-package com.futureyou.backend.entity;
+ package com.futureyou.backend.entity;
+
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
 
 @Entity
 @Table(name = "resumes")
@@ -27,6 +30,8 @@ public class Resume {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    private LocalDateTime uploadedAt;
 
     public Resume() {
     }
@@ -83,5 +88,13 @@ public class Resume {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+     public LocalDateTime getUploadedAt() {
+        return uploadedAt;
+    }
+
+    public void setUploadedAt(LocalDateTime uploadedAt) {
+        this.uploadedAt = uploadedAt;
     }
 }

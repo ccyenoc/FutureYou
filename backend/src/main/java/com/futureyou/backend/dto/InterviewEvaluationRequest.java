@@ -58,4 +58,5 @@ public class InterviewEvaluationRequest {
     public void setResumeText(String resumeText) {
         this.resumeText = resumeText;
     }
+
 }

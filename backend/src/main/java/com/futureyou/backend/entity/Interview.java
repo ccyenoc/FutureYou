@@ -1,6 +1,7 @@
 package com.futureyou.backend.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -29,6 +31,9 @@ public class Interview {
     private Integer confidenceScore;
 
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "interview")
+    private List<QuestionReview> questionReviews;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

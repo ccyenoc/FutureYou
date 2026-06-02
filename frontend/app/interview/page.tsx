@@ -344,7 +344,6 @@ export default function InterviewPage() {
   Overall Score: ${analysis.overallScore}
   Technical Score: ${analysis.technicalScore}
   Communication Score: ${analysis.communicationScore}
-  Confidence Score: ${analysis.confidenceScore}
 
   ========================================
 
@@ -708,13 +707,6 @@ export default function InterviewPage() {
               <p>Communication</p>
               <h2 className="text-3xl font-bold">
                 {analysis.communicationScore}
-              </h2>
-            </div>
-
-            <div className="bg-zinc-900 rounded-2xl p-5 text-center">
-              <p>Confidence</p>
-              <h2 className="text-3xl font-bold">
-                {analysis.confidenceScore}
               </h2>
             </div>
 

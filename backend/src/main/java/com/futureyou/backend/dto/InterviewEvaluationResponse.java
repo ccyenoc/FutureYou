@@ -1,6 +1,7 @@
 package com.futureyou.backend.dto;
 
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonAlias;
 
 public class InterviewEvaluationResponse {
 
@@ -16,6 +17,7 @@ public class InterviewEvaluationResponse {
 
     private List<String> suggestions;
 
+    @JsonAlias("reviews")
     private List<QuestionReview> questionReview;
 
     public InterviewEvaluationResponse() {
@@ -47,7 +49,12 @@ public class InterviewEvaluationResponse {
         this.overallScore = overallScore;
     }
 
+    // Keep getTechnicalScore returning professionalKnowledgeScore for frontend compatibility
     public int getTechnicalScore() {
+        return professionalKnowledgeScore;
+    }
+
+    public int getProfessionalKnowledgeScore() {
         return professionalKnowledgeScore;
     }
 
@@ -55,16 +62,12 @@ public class InterviewEvaluationResponse {
         this.professionalKnowledgeScore = professionalKnowledgeScore;
     }
 
-    public int getProfessionalKnowledgeScore() {
-        return communicationScore;
+    public int getCommunicationScore() {
+       return communicationScore;
     }
 
     public void setCommunicationScore(int communicationScore) {
         this.communicationScore = communicationScore;
-    }
-
-    public int getCommunicationScore() {
-       return communicationScore;
     }
 
     public List<String> getStrengths() {

@@ -649,20 +649,6 @@ export default function InterviewPage() {
 
           )}
 
-          <button
-            onClick={evaluateInterview}
-            className="
-              rounded-xl
-              bg-green-600
-              px-6
-              py-3
-              font-semibold
-            "
-          >
-            Evaluate
-          </button>
-
-
         </div>
 
       </div>

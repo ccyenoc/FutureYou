@@ -135,10 +135,6 @@ export default function AuthPage() {
 
             rounded-3xl
 
-            bg-gradient-to-br
-            from-[#E7D4FF]
-            via-[#B889FF]
-            to-[#7D4BFF]
 
             flex
             items-center
@@ -147,7 +143,13 @@ export default function AuthPage() {
             text-3xl
             "
           >
-            👻
+             <img
+               src="/logo.png"
+               alt="Future You"
+               width={80}
+               height={80}
+               className="w-full h-full object-cover"
+            />
           </div>
 
           <h1
@@ -157,7 +159,7 @@ export default function AuthPage() {
             text-white
             "
           >
-            Career Echo
+            Future You
           </h1>
 
           <p

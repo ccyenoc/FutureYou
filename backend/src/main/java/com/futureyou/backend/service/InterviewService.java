@@ -67,15 +67,15 @@ public class InterviewService {
 
     public InterviewReportResponse getInterviewReport( Long interviewId) {
 
-    Interview interview = interviewRepository.findById(interviewId)
-    .orElseThrow( () -> new RuntimeException( "Interview not found" ) );
+        Interview interview = interviewRepository.findById(interviewId)
+        .orElseThrow( () -> new RuntimeException( "Interview not found" ) );
 
-    List<QuestionReview> reviews = questionReviewRepository.findByInterviewId(interviewId);
+        List<QuestionReview> reviews = questionReviewRepository.findByInterviewId(interviewId);
 
-    InterviewReportResponse response = new InterviewReportResponse();
+        InterviewReportResponse response = new InterviewReportResponse();
 
-    response.setInterview(interview);
-    response.setReviews(reviews);
+        response.setInterview(interview);
+        response.setReviews(reviews);
 
     return response;
 }

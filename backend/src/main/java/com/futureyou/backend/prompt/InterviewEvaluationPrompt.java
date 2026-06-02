@@ -63,9 +63,8 @@ Use EXACTLY this structure:
 
 {
 "overallScore": 0,
-"technicalScore": 0,
+"professionalKnowledgeScore": 0,
 "communicationScore": 0,
-"confidenceScore": 0,
 
 "strengths": [
 "",

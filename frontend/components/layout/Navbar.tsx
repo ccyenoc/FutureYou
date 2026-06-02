@@ -183,7 +183,7 @@ export default function Navbar() {
           {/* Logged In User */}
 
           {isLoggedIn && (
-            <button
+            <div
               onClick={() => router.push("/profile")}
               className="
               flex
@@ -239,7 +239,7 @@ export default function Navbar() {
 
              <button
               onClick={(e) => { e.stopPropagation()
-                localStorage.removeItem("user")
+                localStorage.clear()
                 router.push("/auth")
               }}
               className="
@@ -251,7 +251,7 @@ export default function Navbar() {
             >
               Logout
             </button>
-            </button>
+            </div>
           )}
 
         </div>

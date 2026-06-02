@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 import Navbar from "@/components/layout/Navbar"
 
@@ -27,6 +27,16 @@ export default function Home() {
   const careers = profile?.careers || []
 
   const currentCareer = careers[selectedCareer]
+
+  useEffect(() => {
+
+    const savedAnalysis = localStorage.getItem("careerAnalysis")
+
+    if(savedAnalysis){
+      setProfile(JSON.parse(savedAnalysis))
+    }
+
+  }, [])
 
   return (
 

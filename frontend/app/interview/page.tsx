@@ -81,6 +81,8 @@ export default function InterviewPage() {
 
     const data = await response.json()
 
+    localStorage.setItem("latestInterviewAnalysis",JSON.stringify(data))
+
     setAnalysis(data)
   }
 
@@ -422,6 +424,21 @@ export default function InterviewPage() {
 
     URL.revokeObjectURL(url)
   }
+
+  useEffect(() => {
+
+  const savedAnalysis =
+    localStorage.getItem(
+      "latestInterviewAnalysis"
+    )
+
+  if(savedAnalysis){
+    setAnalysis(
+      JSON.parse(savedAnalysis)
+    )
+  }
+
+}, [])
 
   return (
   <div className="min-h-screen bg-black text-white">

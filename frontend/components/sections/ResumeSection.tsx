@@ -64,11 +64,15 @@ export default function ResumeSection({setProfile} : ResumeSectionProps) {
       const data = await response.json()
 
       localStorage.setItem( "resumeText", data.resumeText )
+      localStorage.setItem( "careerAnalysis", JSON.stringify(data) )
 
       setProfile(data)
     }
     catch(err){
       console.log(err)
+      alert(
+      "AI analysis is temporarily unavailable. Please try again in a few minutes."
+    )
     }
     finally{
       setLoading(false)

@@ -82,11 +82,6 @@ export default function InterviewPage() {
     const data = await response.json()
 
     setAnalysis(data)
-
-    console.log(
-        "Interview Analysis :",
-        data
-      )
   }
 
   const startInterview = async () => {

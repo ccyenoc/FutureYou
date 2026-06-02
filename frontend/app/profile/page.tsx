@@ -20,6 +20,7 @@ export default function ProfilePage() {
 
         setUsername( user.username )
         setEmail( user.email )
+        setProfileImage(user.profilePictureUrl)
     }
 
     }, [])
@@ -33,24 +34,25 @@ export default function ProfilePage() {
 
     useEffect(() => {
 
-        const storedUser = localStorage.getItem("user")
+        const storedUser = JSON.parse(
+        localStorage.getItem("user") || "null"
+    )
 
-        if (!storedUser) return
+    if(!storedUser) return
 
-        const user = JSON.parse(storedUser)
+    fetch(`http://localhost:8080/users/${storedUser.id}`)
+        .then(res => res.json())
+        .then(user => {
 
-        console.log("USER ID 1 : ",user.userId)
+            setUsername(user.username)
+            setEmail(user.email)
+            setProfileImage(user.profilePictureUrl)
 
-        setUsername(user.username)
-        setEmail(user.email)
-
-        loadInterviews(user.userId)
+        })
 
     }, [])
 
     const loadInterviews = async (userId: number) => {
-
-        console.log("USER ID 1 : ",userId)
 
     try {
 
@@ -245,15 +247,17 @@ const totalInterviews =
                 className="hidden"
                 onChange={(e) => {
 
-                    const file =
-                    e.target.files?.[0]
+                    const file = e.target.files?.[0]
 
                     if (!file) return
 
-                    const imageUrl =
-                    URL.createObjectURL(file)
+                    const reader = new FileReader()
 
-                    setProfileImage(imageUrl)
+                    reader.onloadend = () => {
+                        setProfileImage(reader.result as string)
+                    }
+
+                    reader.readAsDataURL(file)
 
                 }}
               />

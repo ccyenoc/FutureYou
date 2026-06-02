@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Moon, ChevronDown } from "lucide-react"
 import {useState, useEffect} from "react"
+import Image from "next/image";
 
 export default function Navbar() {
 
@@ -62,22 +63,17 @@ export default function Navbar() {
             className="
             w-12
             h-12
-
             rounded-2xl
-
-            bg-gradient-to-br
-            from-[#E7D4FF]
-            via-[#B889FF]
-            to-[#7D4BFF]
-
-            flex
-            items-center
-            justify-center
-
-            shadow-[0_0_40px_rgba(133,83,255,.45)]
+            overflow-hidden
             "
           >
-            👻
+            <img
+               src="/logo.png"
+               alt="Future You"
+               width={50}
+               height={50}
+               className="w-full h-full object-cover"
+            />
           </div>
 
           <div>
@@ -89,7 +85,7 @@ export default function Navbar() {
               "
             >
               <span className="text-white">
-                Career
+                Future
               </span>
 
               <span
@@ -103,7 +99,7 @@ export default function Navbar() {
                 "
               >
                 {" "}
-                Echo
+                You
               </span>
             </h1>
 

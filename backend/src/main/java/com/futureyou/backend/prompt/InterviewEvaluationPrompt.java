@@ -41,7 +41,6 @@ Generate a strong model answer that would perform well in a real interview.
 overallScore must be an integer from 0-100.
 technicalScore must be an integer from 0-100.
 communicationScore must be an integer from 0-100.
-confidenceScore must be an integer from 0-100.
 Create EXACTLY one review object for each interview question.
 The number of reviews must match the number of questions.
 feedback should be specific and constructive.

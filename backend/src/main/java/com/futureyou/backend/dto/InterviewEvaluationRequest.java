@@ -12,6 +12,8 @@ public class InterviewEvaluationRequest {
 
     private String resumeText;
 
+    private Long userId;
+
     public InterviewEvaluationRequest() {
     }
 
@@ -57,6 +59,14 @@ public class InterviewEvaluationRequest {
 
     public void setResumeText(String resumeText) {
         this.resumeText = resumeText;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
 }

@@ -56,25 +56,7 @@ export default function InterviewPage() {
   const evaluateInterview =
   async () => {
 
-    console.log(
-  "Questions:",
-  questionsRef.current
-)
-
-console.log(
-  "Answers:",
-  answersRef.current
-)
-
-console.log(
-  "Questions Length:",
-  questionsRef.current.length
-)
-
-console.log(
-  "Answers Length:",
-  answersRef.current.length
-) 
+    const user = JSON.parse(localStorage.getItem("user") || "null")
 
     const response =
       await fetch(
@@ -88,19 +70,11 @@ console.log(
           },
 
           body: JSON.stringify({
-
+            userId : user?.userId,
             career,
-
-            questions:
-             questionsRef.current,
-
+            questions:  questionsRef.current,
             answers: answersRef.current,
-
-            resumeText:
-              localStorage.getItem(
-                "resumeText"
-              )
-
+            resumeText: localStorage.getItem( "resumeText" )
           })
         }
       )
@@ -247,11 +221,6 @@ console.log(
 
       setLatestAnswer(transcript)
 
-      console.log(
-        "Answer:",
-        transcript
-      )
-
       const updatedAnswers = [
         ...answersRef.current,
         transcript
@@ -265,18 +234,6 @@ console.log(
           questionsRef.current[currentQuestionRef.current],
           transcript
         )
-
-      console.log(interviewResult)
-
-      console.log(
-        "Current Question:",
-        currentQuestionRef.current
-      )
-
-      console.log(
-        "Questions Length:",
-        questionsRef.current.length
-      )
 
       if ( interviewResult.action === "FOLLOW_UP" ) {
         if (followUpCountRef.current >= 2) {
@@ -420,7 +377,7 @@ console.log(
 
   `
 
-    analysis.reviews?.forEach(
+    analysis.questionReview?.forEach(
       (
         review: any,
         index: number
@@ -676,8 +633,23 @@ console.log(
             >
               Start Interview
             </button>
+            
 
           )}
+
+          <button
+            onClick={evaluateInterview}
+            className="
+              rounded-xl
+              bg-green-600
+              px-6
+              py-3
+              font-semibold
+            "
+          >
+            Evaluate
+          </button>
+
 
         </div>
 
@@ -728,7 +700,7 @@ console.log(
             </div>
 
             <div className="bg-zinc-900 rounded-2xl p-5 text-center">
-              <p>Technical</p>
+              <p>Professional Knowledge</p>
               <h2 className="text-3xl font-bold">
                 {analysis.technicalScore}
               </h2>
@@ -804,7 +776,7 @@ console.log(
 
             </div> 
 
-            {analysis.reviews?.length > 0 && (
+            {analysis.questionReview?.length > 0 && (
 
           <div className="mt-8">
 
@@ -814,7 +786,7 @@ console.log(
 
             <div className="space-y-6">
 
-              {analysis.reviews.map(
+              {analysis.questionReview.map(
                 (review: any, index: number) => (
 
                   <div

@@ -166,7 +166,6 @@ public InterviewEvaluationResponse getMockEvaluation() {
         82, // overall
         78, // technical
         88, // communication
-        80, // confidence
 
         List.of(
             "Clear communication skills",

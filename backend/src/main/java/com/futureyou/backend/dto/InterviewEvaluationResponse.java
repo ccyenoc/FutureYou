@@ -6,11 +6,9 @@ public class InterviewEvaluationResponse {
 
     private int overallScore;
 
-    private int technicalScore;
-
     private int communicationScore;
 
-    private int confidenceScore;
+    private int professionalKnowledgeScore;
 
     private List<String> strengths;
 
@@ -18,29 +16,27 @@ public class InterviewEvaluationResponse {
 
     private List<String> suggestions;
 
-    private List<QuestionReview> reviews;
+    private List<QuestionReview> questionReview;
 
     public InterviewEvaluationResponse() {
     }
 
     public InterviewEvaluationResponse(
         int overallScore,
-        int technicalScore,
+        int professionalKnowledgeScore,
         int communicationScore,
-        int confidenceScore,
         List<String> strengths,
         List<String> weaknesses,
         List<String> suggestions,
-        List<QuestionReview> reviews
+        List<QuestionReview> questionReview
     ) {
         this.overallScore = overallScore;
-        this.technicalScore = technicalScore;
+        this.professionalKnowledgeScore = professionalKnowledgeScore;
         this.communicationScore = communicationScore;
-        this.confidenceScore = confidenceScore;
         this.strengths = strengths;
         this.weaknesses = weaknesses;
         this.suggestions = suggestions;
-        this.reviews = reviews;
+        this.questionReview = questionReview;
     }
 
     public int getOverallScore() {
@@ -52,14 +48,14 @@ public class InterviewEvaluationResponse {
     }
 
     public int getTechnicalScore() {
-        return technicalScore;
+        return professionalKnowledgeScore;
     }
 
-    public void setTechnicalScore(int technicalScore) {
-        this.technicalScore = technicalScore;
+    public void setProfessionalKnowledgeScore(int professionalKnowledgeScore) {
+        this.professionalKnowledgeScore = professionalKnowledgeScore;
     }
 
-    public int getCommunicationScore() {
+    public int getProfessionalKnowledgeScore() {
         return communicationScore;
     }
 
@@ -67,12 +63,8 @@ public class InterviewEvaluationResponse {
         this.communicationScore = communicationScore;
     }
 
-    public int getConfidenceScore() {
-        return confidenceScore;
-    }
-
-    public void setConfidenceScore(int confidenceScore) {
-        this.confidenceScore = confidenceScore;
+    public int getCommunicationScore() {
+       return communicationScore;
     }
 
     public List<String> getStrengths() {
@@ -100,10 +92,10 @@ public class InterviewEvaluationResponse {
     }
 
     public List<QuestionReview> getQuestionReview() {
-        return reviews;
+        return questionReview;
     }
 
-    public void setQuestionReview(List<QuestionReview> reviews) {
-        this.reviews = reviews;
+    public void setQuestionReview(List<QuestionReview> questionReview) {
+        this.questionReview = questionReview;
     }
 }

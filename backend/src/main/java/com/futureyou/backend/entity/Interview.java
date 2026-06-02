@@ -3,6 +3,8 @@ package com.futureyou.backend.entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,15 +26,14 @@ public class Interview {
 
     private Integer overallScore;
 
-    private Integer technicalScore;
+    private Integer professionalKnowledgeScore;
 
     private Integer communicationScore;
-
-    private Integer confidenceScore;
 
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "interview")
+    @JsonIgnore
     private List<QuestionReview> questionReviews;
 
     @ManyToOne
@@ -46,18 +47,16 @@ public class Interview {
             Long id,
             String career,
             Integer overallScore,
-            Integer technicalScore,
+            Integer professionalKnowledgeScore,
             Integer communicationScore,
-            Integer confidenceScore,
             LocalDateTime createdAt,
             User user
     ) {
         this.id = id;
         this.career = career;
         this.overallScore = overallScore;
-        this.technicalScore = technicalScore;
+        this.professionalKnowledgeScore = professionalKnowledgeScore;
         this.communicationScore = communicationScore;
-        this.confidenceScore = confidenceScore;
         this.createdAt = createdAt;
         this.user = user;
     }
@@ -86,12 +85,12 @@ public class Interview {
         this.overallScore = overallScore;
     }
 
-    public Integer getTechnicalScore() {
-        return technicalScore;
+    public Integer getProfessionalKnowledgeScore() {
+        return professionalKnowledgeScore;
     }
 
-    public void setTechnicalScore(Integer technicalScore) {
-        this.technicalScore = technicalScore;
+    public void setProfessionalKnowledgeScore(Integer professionalKnowledgeScore) {
+        this.professionalKnowledgeScore = professionalKnowledgeScore;
     }
 
     public Integer getCommunicationScore() {
@@ -100,14 +99,6 @@ public class Interview {
 
     public void setCommunicationScore(Integer communicationScore) {
         this.communicationScore = communicationScore;
-    }
-
-    public Integer getConfidenceScore() {
-        return confidenceScore;
-    }
-
-    public void setConfidenceScore(Integer confidenceScore) {
-        this.confidenceScore = confidenceScore;
     }
 
     public LocalDateTime getCreatedAt() {

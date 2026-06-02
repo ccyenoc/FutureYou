@@ -6,8 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.futureyou.backend.entity.Resume;
 
-public interface ResumeRepository
-        extends JpaRepository<Resume, Long> {
+public interface ResumeRepository extends JpaRepository<Resume, Long> {
 
     List<Resume> findByUserId( Long userId );
 

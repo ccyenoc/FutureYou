@@ -38,7 +38,6 @@ public class UserService {
     }
 
     public User getUserById( Long userId ) {
-
         return userRepository
                 .findById(userId)
                 .orElseThrow(

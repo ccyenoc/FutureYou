@@ -29,35 +29,72 @@ export default function ProfilePage() {
   const [password, setPassword] = useState("")
   const [profileImage, setProfileImage] = useState<string | null>(null)
 
-  const interviewHistory = [
-    {
-      id: 1,
-      career: "Full Stack Developer",
-      score: 84,
-      date: "31 May 2026"
-    },
-    {
-      id: 2,
-      career: "Full Stack Developer",
-      score: 79,
-      date: "25 May 2026"
-    },
-    {
-      id: 3,
-      career: "Mobile Developer",
-      score: 75,
-      date: "20 May 2026"
+  const [interviews, setInterviews] = useState<any[]>([])
+
+    useEffect(() => {
+
+        const storedUser = localStorage.getItem("user")
+
+        if (!storedUser) return
+
+        const user = JSON.parse(storedUser)
+
+        console.log("USER ID 1 : ",user.userId)
+
+        setUsername(user.username)
+        setEmail(user.email)
+
+        loadInterviews(user.userId)
+
+    }, [])
+
+    const loadInterviews = async (userId: number) => {
+
+        console.log("USER ID 1 : ",userId)
+
+    try {
+
+        const response = await fetch(
+        `http://localhost:8080/interview/user/${userId}`
+        )
+
+        const data = await response.json()
+
+        setInterviews(data)
+
+        console.log("INTERVIEWS : ",data)
+
+    } catch (err) {
+        console.error(err)
     }
-  ]
+    }
+    
+
+  const averageScore =
+  interviews.length > 0
+    ? interviews.reduce(
+        (sum, interview) => sum + interview.overallScore,
+        0
+      ) / interviews.length
+    : 0;
+
+const highestScore =
+  interviews.length > 0
+    ? Math.max(
+        ...interviews.map(
+          interview => interview.overallScore
+        )
+      )
+    : 0;
+
+const totalInterviews =
+  interviews.length;
 
   const handleSave = async () => {
 
         try {
 
-            const storedUser =
-            JSON.parse(
-                localStorage.getItem("user") || "{}"
-            )
+            const storedUser = JSON.parse( localStorage.getItem("user") || "{}")
 
             const response =
             await fetch(
@@ -73,7 +110,8 @@ export default function ProfilePage() {
                 body: JSON.stringify({
                     username,
                     email,
-                    password
+                    password,
+                    profilePictureUrl: profileImage
                 })
                 }
             )
@@ -357,11 +395,11 @@ export default function ProfilePage() {
             "
           >
             <h3 className="text-zinc-400">
-              Current Career
+              Average Score
             </h3>
 
             <p className="text-xl font-bold mt-2">
-              Full Stack Developer
+              {Math.round(averageScore)}
             </p>
           </div>
 
@@ -373,11 +411,11 @@ export default function ProfilePage() {
             "
           >
             <h3 className="text-zinc-400">
-              Average Score
+              Highest Score
             </h3>
 
             <p className="text-xl font-bold mt-2">
-              79
+              {highestScore}
             </p>
           </div>
 
@@ -393,7 +431,7 @@ export default function ProfilePage() {
             </h3>
 
             <p className="text-xl font-bold mt-2">
-              3
+              {totalInterviews}
             </p>
           </div>
 
@@ -421,7 +459,7 @@ export default function ProfilePage() {
 
           <div className="space-y-4">
 
-            {interviewHistory.map(
+            {interviews.map(
               (interview) => (
 
                 <div
@@ -466,6 +504,7 @@ export default function ProfilePage() {
                     </p>
 
                     <button
+                      onClick={() => router.push(`/report/${interview.id}`)}
                       className="
                         bg-violet-600
                         px-4

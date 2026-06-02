@@ -204,23 +204,53 @@ export default function Navbar() {
                 className="
                 w-11
                 h-11
-
                 rounded-full
-
-                bg-gradient-to-br
-                from-amber-300
-                to-orange-500
-
+                overflow-hidden
                 shadow-lg
-
                 cursor-pointer
                 "
-              />
+              >
+                {user?.profilePictureUrl ? (
+                  <img
+                    src={user.profilePictureUrl}
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div
+                    className="
+                    w-full
+                    h-full
+                    rounded-full
+                    bg-gradient-to-br
+                    from-amber-300
+                    to-orange-500
+                    flex
+                    items-center
+                    justify-center
+                    text-black
+                    font-bold
+                    "
+                  >
+                    {user?.username?.charAt(0)?.toUpperCase() || "U"}
+                  </div>
+                )}
+              </div>
 
-              <ChevronDown
-                size={18}
-                className="text-zinc-400"
-              />
+             <button
+              onClick={(e) => { e.stopPropagation()
+                localStorage.removeItem("user")
+                router.push("/auth")
+              }}
+              className="
+              text-sm
+              text-red-400
+              hover:text-red-300
+              transition
+              "
+            >
+              Logout
+            </button>
             </button>
           )}
 

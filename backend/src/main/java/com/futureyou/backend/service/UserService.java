@@ -16,6 +16,10 @@ public class UserService {
     }
 
     public User updateProfile( Long userId, UpdateProfileRequest request) {
+System.out.println("USERNAME = " + request.getUsername());
+System.out.println("EMAIL = " + request.getEmail());
+System.out.println("PASSWORD = " + request.getPassword());
+System.out.println("PROFILE = " + request.getProfilePictureUrl());
 
         User user = userRepository.findById(userId)
                 .orElseThrow(

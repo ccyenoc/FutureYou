@@ -1,10 +1,15 @@
 package com.futureyou.backend.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.futureyou.backend.dto.UpdateProfileRequest;
 import com.futureyou.backend.entity.User;
 import com.futureyou.backend.service.UserService;
-
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
@@ -19,9 +24,6 @@ public class UserController {
 
     @PutMapping("/{id}")
     public User updateProfile( @PathVariable Long id, @RequestBody UpdateProfileRequest request) {
-        return userService.updateProfile(
-            id,
-            request
-        );
+        return userService.updateProfile( id, request );
     }
 }

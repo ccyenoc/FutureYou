@@ -13,17 +13,19 @@ export default function ProfilePage() {
   useEffect(() => {
 
     const storedUser =
-        localStorage.getItem("user")
+        JSON.parse(localStorage.getItem("user") || "null")
 
-    if (storedUser) {
-        const user = JSON.parse(storedUser)
+    console.log("USER:", storedUser)
 
-        setUsername( user.username )
-        setEmail( user.email )
-        setProfileImage(user.profilePictureUrl)
-    }
+    if (!storedUser) return
 
-    }, [])
+    setUsername(storedUser.username || "")
+    setEmail(storedUser.email || "")
+    setProfileImage(storedUser.profilePictureUrl)
+
+    loadInterviews(storedUser.userId)
+
+}, [])
 
   const [username, setUsername] = useState("User")
   const [email, setEmail] = useState("Email")
@@ -31,26 +33,6 @@ export default function ProfilePage() {
   const [profileImage, setProfileImage] = useState<string | null>(null)
 
   const [interviews, setInterviews] = useState<any[]>([])
-
-    useEffect(() => {
-
-        const storedUser = JSON.parse(
-        localStorage.getItem("user") || "null"
-    )
-
-    if(!storedUser) return
-
-    fetch(`http://localhost:8080/users/${storedUser.id}`)
-        .then(res => res.json())
-        .then(user => {
-
-            setUsername(user.username)
-            setEmail(user.email)
-            setProfileImage(user.profilePictureUrl)
-
-        })
-
-    }, [])
 
     const loadInterviews = async (userId: number) => {
 
@@ -113,7 +95,6 @@ const totalInterviews =
                     username,
                     email,
                     password,
-                    profilePictureUrl: profileImage
                 })
                 }
             )
@@ -133,10 +114,9 @@ const totalInterviews =
             "user",
             JSON.stringify({
                 ...storedUser,
-                username:
-                updatedUser.username,
-                email:
-                updatedUser.email
+                username: updatedUser.username,
+                email: updatedUser.email,
+                profilePictureUrl : updatedUser.profilePictureUrl
             })
             )
 
@@ -504,7 +484,7 @@ const totalInterviews =
                         text-green-400
                       "
                     >
-                      {interview.score}
+                      {interview.overallScore}
                     </p>
 
                     <button

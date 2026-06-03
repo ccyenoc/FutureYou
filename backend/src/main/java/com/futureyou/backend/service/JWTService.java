@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 
 import com.futureyou.backend.entity.User;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+
 
 @Service
 public class JWTService {
@@ -35,4 +37,18 @@ public class JWTService {
                 )
                 .compact();
     }
+
+    public Long extractUserId(String token) {
+
+    Claims claims = Jwts.parser().verifyWith(
+        Keys.hmacShaKeyFor( SECRET.getBytes()))
+        .build()
+        .parseSignedClaims(token)
+        .getPayload();
+
+    return claims.get(
+            "userId",
+            Long.class
+    );
+}
 }

@@ -3,6 +3,8 @@
 import { Upload } from "lucide-react"
 import { useState } from "react"
 
+import { getMultipartHeaders } from "@/lib/auth"
+
 type ResumeSectionProps = {
   setProfile: (profile: any) => void
 }
@@ -26,7 +28,6 @@ export default function ResumeSection({setProfile} : ResumeSectionProps) {
     setFileName(file.name)
 
     const formData = new FormData()
-
     formData.append("file", file)
 
     if(!file) return
@@ -40,12 +41,11 @@ export default function ResumeSection({setProfile} : ResumeSectionProps) {
       
       if (user) {
 
-        formData.append( "userId", user.userId.toString())
-
         response = await fetch(
           "http://localhost:8080/resume/upload-save",
           {
             method: "POST",
+            headers: getMultipartHeaders(),
             body: formData
           }
         )
@@ -56,7 +56,7 @@ export default function ResumeSection({setProfile} : ResumeSectionProps) {
           "http://localhost:8080/resume/upload",
           {
             method: "POST",
-            body: formData
+            body: formData  
           }
         )
 

@@ -9,6 +9,7 @@ import DiscoverSection from "@/components/sections/DiscoverSection"
 import RoadmapSection from "@/components/sections/RoadmapSection"
 import ChatbotSection from "@/components/sections/ChatbotSection"
 
+
 export type Career = {
   title: string
   reasoning: string

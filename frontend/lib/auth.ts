@@ -3,33 +3,32 @@ export function getUser() {
         return null
     }
 
-    return JSON.parse( localStorage.getItem("user") || "null")
+    return JSON.parse(
+        localStorage.getItem("user") || "null"
+    )
 }
 
 export function getToken() {
-    const user = getUser()
-
-    return user?.token || null
+    return getUser()?.token || null
 }
 
-export function getJsonHeaders() {
-    const token =
-        localStorage.getItem("token")
+export function getJsonHeaders(): HeadersInit {
+
+    const token = getToken()
 
     return {
         "Content-Type": "application/json",
         ...(token && {
-            Authorization:
-            `Bearer ${token}`
+            Authorization: `Bearer ${token}`
         })
     }
 }
 
 export function getMultipartHeaders(): HeadersInit {
 
-    const headers = new Headers()
+    const token = getToken()
 
-    const token = localStorage.getItem("token")
+    const headers = new Headers()
 
     if (token) {
         headers.append(

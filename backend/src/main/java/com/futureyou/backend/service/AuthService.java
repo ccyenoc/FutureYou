@@ -1,5 +1,6 @@
 package com.futureyou.backend.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.futureyou.backend.dto.AuthResponse;
@@ -12,9 +13,13 @@ import com.futureyou.backend.repository.UserRepository;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JWTService jwtService;
 
-    public AuthService( UserRepository userRepository ) {
+    public AuthService( UserRepository userRepository ,PasswordEncoder passwordEncoder, JWTService jwtService) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     public AuthResponse register( RegisterRequest request ) {
@@ -37,15 +42,18 @@ public class AuthService {
 
         user.setEmail( request.getEmail() );
 
-        user.setPassword( request.getPassword() );
+        user.setPassword(  passwordEncoder.encode(request.getPassword()) );
 
         User savedUser = userRepository.save( user );
+
+        String token = jwtService.generateToken(user);
 
         return new AuthResponse(
             savedUser.getId(),
             savedUser.getUsername(),
             savedUser.getEmail(),
             savedUser.getProfilePictureUrl(),
+            token,
             "Registration successful"
         );
     }
@@ -60,17 +68,23 @@ public class AuthService {
                         )
                 );
 
-        if (!user.getPassword().equals(request.getPassword())) {
+        if (!passwordEncoder.matches(
+                request.getPassword(),
+                user.getPassword())) {
+
             throw new RuntimeException(
                 "Invalid password"
             );
         }
+
+        String token = jwtService.generateToken(user);
 
         return new AuthResponse(
             user.getId(),
             user.getUsername(),
             user.getEmail(),
             user.getProfilePictureUrl(),
+            token,
             "Login successful"
         );
     }

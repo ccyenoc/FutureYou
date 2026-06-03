@@ -12,6 +12,8 @@ public class AuthResponse {
 
     private String message;
 
+    private String token;
+
     public AuthResponse() {}
 
     public AuthResponse(
@@ -19,13 +21,15 @@ public class AuthResponse {
         String username,
         String email,
         String profilePictureUrl,
-        String message
+        String message,
+        String token
     ) {
         this.userId = userId;
         this.username = username;
         this.email = email;
         this.profilePictureUrl = profilePictureUrl;
         this.message = message;
+        this.token = token;
     }
 
     public Long getUserId() {

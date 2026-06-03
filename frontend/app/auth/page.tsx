@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 
+
 export default function AuthPage() {
 
   const [mode, setMode] = useState<"login" | "register">( "login")
@@ -36,11 +37,18 @@ export default function AuthPage() {
 
             const data = await response.json()
 
-            if (!response.ok) {
-                throw new Error( data.message || "Registration failed")
-            }
+            localStorage.setItem("token", data.token)
 
-            localStorage.setItem( "user", JSON.stringify(data))
+            localStorage.setItem(
+                "user",
+                JSON.stringify({
+                    userId: data.userId,
+                    username: data.username,
+                    email: data.email,
+                    profilePictureUrl: data.profilePictureUrl
+                })
+            )
+
             window.location.href = "/"
         }
         catch (err: any) {

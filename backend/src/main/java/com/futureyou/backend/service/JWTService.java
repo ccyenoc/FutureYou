@@ -40,15 +40,16 @@ public class JWTService {
 
     public Long extractUserId(String token) {
 
-    Claims claims = Jwts.parser().verifyWith(
-        Keys.hmacShaKeyFor( SECRET.getBytes()))
-        .build()
-        .parseSignedClaims(token)
-        .getPayload();
+        Claims claims = Jwts.parser().verifyWith(
+                Keys.hmacShaKeyFor(SECRET.getBytes()))
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
 
-    return claims.get(
-            "userId",
-            Long.class
-    );
-}
+        Object userIdVal = claims.get("userId");
+        if (userIdVal instanceof Number) {
+            return ((Number) userIdVal).longValue();
+        }
+        return null;
+    }
 }

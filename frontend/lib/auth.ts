@@ -9,7 +9,10 @@ export function getUser() {
 }
 
 export function getToken() {
-    return getUser()?.token || null
+    if (typeof window === "undefined") {
+        return null
+    }
+    return getUser()?.token || localStorage.getItem("token") || null
 }
 
 export function getJsonHeaders(): HeadersInit {

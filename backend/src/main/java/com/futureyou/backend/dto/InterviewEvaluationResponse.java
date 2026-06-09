@@ -49,11 +49,6 @@ public class InterviewEvaluationResponse {
         this.overallScore = overallScore;
     }
 
-    // Keep getTechnicalScore returning professionalKnowledgeScore for frontend compatibility
-    public int getTechnicalScore() {
-        return professionalKnowledgeScore;
-    }
-
     public int getProfessionalKnowledgeScore() {
         return professionalKnowledgeScore;
     }

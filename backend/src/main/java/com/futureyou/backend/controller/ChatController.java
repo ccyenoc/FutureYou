@@ -13,7 +13,7 @@ import com.futureyou.backend.service.JobService;
 
 @RestController
 @RequestMapping("/chat")
-public class ChatController{
+public class ChatController {
 
     @Autowired
     private ChatService chatService;
@@ -21,7 +21,23 @@ public class ChatController{
     private JobService jobService;
 
     @PostMapping
-    public ChatResponse ask( @RequestBody ChatRequest request){
+    public ChatResponse ask(@RequestBody ChatRequest request) {
         return chatService.reply(request);
+    }
+
+    public ChatService getChatService() {
+        return chatService;
+    }
+
+    public void setChatService(ChatService chatService) {
+        this.chatService = chatService;
+    }
+
+    public void setJobService(JobService jobService) {
+        this.jobService = jobService;
+    }
+
+    public JobService getJobService() {
+        return jobService;
     }
 }

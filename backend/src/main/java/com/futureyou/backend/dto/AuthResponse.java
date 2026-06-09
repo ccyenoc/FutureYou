@@ -14,16 +14,20 @@ public class AuthResponse {
 
     private String token;
 
-    public AuthResponse() {}
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public AuthResponse() {
+    }
 
     public AuthResponse(
-        Long userId,
-        String username,
-        String email,
-        String profilePictureUrl,
-        String message,
-        String token
-    ) {
+            Long userId,
+            String username,
+            String email,
+            String profilePictureUrl,
+            String message,
+            String token) {
         this.userId = userId;
         this.username = username;
         this.email = email;
@@ -36,7 +40,7 @@ public class AuthResponse {
         return userId;
     }
 
-    public void setUserId( Long userId ) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -44,7 +48,7 @@ public class AuthResponse {
         return username;
     }
 
-    public void setUsername( String username ) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
@@ -52,7 +56,7 @@ public class AuthResponse {
         return email;
     }
 
-    public void setEmail( String email ) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
@@ -60,7 +64,7 @@ public class AuthResponse {
         return profilePictureUrl;
     }
 
-    public void setProfilePictureUrl( String profilePictureUrl ) {
+    public void setProfilePictureUrl(String profilePictureUrl) {
         this.profilePictureUrl = profilePictureUrl;
     }
 
@@ -68,7 +72,11 @@ public class AuthResponse {
         return message;
     }
 
-    public void setMessage( String message ) {
+    public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getToken() {
+        return token;
     }
 }

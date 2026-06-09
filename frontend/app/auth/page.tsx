@@ -5,7 +5,7 @@ import { useState } from "react"
 
 export default function AuthPage() {
 
-  const [mode, setMode] = useState<"login" | "register">( "login")
+  const [mode, setMode] = useState<"login" | "register">("login")
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -15,88 +15,90 @@ export default function AuthPage() {
   const register = async () => {
     try {
 
-        setLoading(true)
-        setError("")
+      setLoading(true)
+      setError("")
 
-        const response = await fetch(
-            "http://localhost:8080/auth/register",
-            {
-                method: "POST",
+      const response = await fetch(
+        "http://localhost:8080/auth/register",
+        {
+          method: "POST",
 
-                headers: {
-                "Content-Type": "application/json"
-                },
+          headers: {
+            "Content-Type": "application/json"
+          },
 
-                body: JSON.stringify({
-                username,
-                email,
-                password
-                })
-            }
-            )
-
-            const data = await response.json()
-
-            localStorage.setItem("token", data.token)
-
-            localStorage.setItem(
-                "user",
-                JSON.stringify({
-                    userId: data.userId,
-                    username: data.username,
-                    email: data.email,
-                    profilePictureUrl: data.profilePictureUrl
-                })
-            )
-
-            window.location.href = "/"
+          body: JSON.stringify({
+            username,
+            email,
+            password
+          })
         }
-        catch (err: any) {
-            setError(err.message)
-        }
-        finally {
-            setLoading(false)
-        }
+      )
+
+      const data = await response.json()
+
+      localStorage.setItem("token", data.token)
+
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          userId: data.userId,
+          username: data.username,
+          email: data.email,
+          profilePictureUrl: data.profilePictureUrl
+        })
+      )
+
+      window.location.href = "/"
     }
-
-    const login = async () => {
-        try {
-            setLoading(true)
-            setError("")
-
-            const response = await fetch(
-            "http://localhost:8080/auth/login",
-            {
-                method: "POST",
-
-                headers: {
-                "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify({
-                email,
-                password
-                })
-            }
-            )
-
-            const data = await response.json()
-
-            if (!response.ok) {
-                throw new Error( data.message || "Login failed" )
-            }
-
-            localStorage.setItem( "user", JSON.stringify(data) )
-            window.location.href = "/"
-
-        }
-        catch (err: any) {
-            setError(err.message)
-        }
-        finally {
-            setLoading(false)
-        }
+    catch (err: any) {
+      setError(err.message)
     }
+    finally {
+      setLoading(false)
+    }
+  }
+
+  const login = async () => {
+    try {
+      setLoading(true)
+      setError("")
+
+      const response = await fetch(
+        "http://localhost:8080/auth/login",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+            email,
+            password
+          })
+        }
+      )
+
+      const data = await response.json()
+
+      console.log(data)
+
+      if (!response.ok) {
+        throw new Error(data.message || "Login failed")
+      }
+
+      localStorage.setItem("user", JSON.stringify(data))
+      window.location.href = "/"
+
+    }
+    catch (err: any) {
+      setError(err.message)
+    }
+    finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <main
@@ -151,12 +153,12 @@ export default function AuthPage() {
             text-3xl
             "
           >
-             <img
-               src="/logo.png"
-               alt="Future You"
-               width={80}
-               height={80}
-               className="w-full h-full object-cover"
+            <img
+              src="/logo.png"
+              alt="Future You"
+              width={80}
+              height={80}
+              className="w-full h-full object-cover"
             />
           </div>
 
@@ -208,10 +210,9 @@ export default function AuthPage() {
 
               transition
 
-              ${
-                mode === "login"
-                  ? "bg-violet-600 text-white"
-                  : "text-zinc-400"
+              ${mode === "login"
+                ? "bg-violet-600 text-white"
+                : "text-zinc-400"
               }
             `}
           >
@@ -230,10 +231,9 @@ export default function AuthPage() {
 
               transition
 
-              ${
-                mode === "register"
-                  ? "bg-violet-600 text-white"
-                  : "text-zinc-400"
+              ${mode === "register"
+                ? "bg-violet-600 text-white"
+                : "text-zinc-400"
               }
             `}
           >
@@ -299,7 +299,7 @@ export default function AuthPage() {
           />
 
           <button
-            onClick={ mode === "login" ? login : register }
+            onClick={mode === "login" ? login : register}
             className="
             w-full
             mt-6

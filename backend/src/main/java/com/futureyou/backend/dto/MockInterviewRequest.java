@@ -5,6 +5,8 @@ public class MockInterviewRequest {
     private String career;
     private String resumeText;
 
+    public MockInterviewRequest() {}
+
     public MockInterviewRequest(String career, String resumeText){
         this.career = career;
         this.resumeText  = resumeText;

@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { 
-  Ghost, 
+import {
+  Ghost,
   Moon,
   ChevronDown,
   ArrowRight,
@@ -21,7 +21,7 @@ import {
   BookOpen,
   FileText
 } from "lucide-react"
-import { cn } from "@/frontend/lib/utils"
+import { cn } from "../lib/utils"
 
 const steps = [
   { number: 1, label: "Resume", active: true },
@@ -131,9 +131,9 @@ export default function CareerGhostDashboard() {
           </button>
           <div className="flex items-center gap-2 cursor-pointer">
             <div className="h-9 w-9 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 overflow-hidden">
-              <img 
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202026-05-27%20at%2011.59.44%E2%80%AFAM-X3fTwrGGWi3MO1RLuIqrxWEl28kkbJ.png" 
-                alt="User" 
+              <img
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202026-05-27%20at%2011.59.44%E2%80%AFAM-X3fTwrGGWi3MO1RLuIqrxWEl28kkbJ.png"
+                alt="User"
                 className="h-full w-full object-cover opacity-0"
               />
             </div>
@@ -159,7 +159,7 @@ export default function CareerGhostDashboard() {
             </div>
 
             {/* Center - Drag & Drop */}
-            <div 
+            <div
               className={cn(
                 "flex-1 flex items-center justify-center gap-4 rounded-xl border-2 border-dashed py-6 px-8 transition-colors",
                 isDragOver ? "border-primary bg-primary/5" : "border-border"
@@ -212,8 +212,8 @@ export default function CareerGhostDashboard() {
                         <stop offset="100%" stopColor="#7c3aed" />
                       </linearGradient>
                     </defs>
-                    <path 
-                      d="M70 10 C30 10 15 50 15 90 C15 130 15 150 15 150 L30 135 L45 150 L60 135 L75 150 L90 135 L105 150 L120 135 L125 150 C125 150 125 130 125 90 C125 50 110 10 70 10 Z" 
+                    <path
+                      d="M70 10 C30 10 15 50 15 90 C15 130 15 150 15 150 L30 135 L45 150 L60 135 L75 150 L90 135 L105 150 L120 135 L125 150 C125 150 125 130 125 90 C125 50 110 10 70 10 Z"
                       fill="url(#ghostGradient)"
                     />
                     {/* Eyes */}
@@ -245,7 +245,7 @@ export default function CareerGhostDashboard() {
               <h2 className="flex items-center gap-2 text-lg font-semibold text-foreground mb-5">
                 <Sparkles className="h-5 w-5 text-amber-400" /> Discover You
               </h2>
-              
+
               <div className="grid grid-cols-3 gap-4">
                 {/* Your Strengths */}
                 <div className="rounded-xl border border-border bg-secondary/30 p-4">
@@ -334,7 +334,7 @@ export default function CareerGhostDashboard() {
               <h2 className="flex items-center gap-2 text-lg font-semibold text-foreground mb-5">
                 Meet Your Future Self <Ghost className="h-5 w-5 text-amber-400" />
               </h2>
-              
+
               <div className="flex gap-4">
                 {/* Avatar */}
                 <div className="flex-shrink-0">
@@ -435,13 +435,13 @@ export default function CareerGhostDashboard() {
                       {/* Number circle */}
                       <div className={cn(
                         "relative z-10 mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold",
-                        index === 0 
-                          ? "bg-primary text-primary-foreground" 
+                        index === 0
+                          ? "bg-primary text-primary-foreground"
                           : "bg-secondary text-muted-foreground border border-border"
                       )}>
                         {phase.number}
                       </div>
-                      
+
                       {/* Phase content */}
                       <div className="rounded-xl border border-border bg-secondary/30 p-4">
                         <h3 className={cn(

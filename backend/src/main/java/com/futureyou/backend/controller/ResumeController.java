@@ -18,14 +18,15 @@ import com.futureyou.backend.service.UserService;
 @RestController
 @RequestMapping("/resume")
 @CrossOrigin
-public class ResumeController{
+public class ResumeController {
 
     private final ResumeService resumeService;
     private final ProfileAnalysisService profileAnalysisService;
     private final UserService userService;
     private final JWTService jwtService;
 
-    public ResumeController(ResumeService resumeService , ProfileAnalysisService profileAnalysisService,UserService userService,JWTService jwtService){
+    public ResumeController(ResumeService resumeService, ProfileAnalysisService profileAnalysisService,
+            UserService userService, JWTService jwtService) {
         this.resumeService = resumeService;
         this.profileAnalysisService = profileAnalysisService;
         this.userService = userService;
@@ -33,27 +34,28 @@ public class ResumeController{
     }
 
     @PostMapping("/upload-save")
-    public ProfileAnalysisResponse uploadResume( @RequestHeader("Authorization") String authHeader, @RequestParam("file") MultipartFile file ) {
+    public ProfileAnalysisResponse uploadResume(@RequestHeader("Authorization") String authHeader,
+            @RequestParam("file") MultipartFile file) {
 
-         String token = authHeader.replace("Bearer ", "");
+        String token = authHeader.replace("Bearer ", "");
 
-         Long userId = jwtService.extractUserId( token );
+        Long userId = jwtService.extractUserId(token);
 
         User user = userService.getUserById(userId);
 
         String extractedText = resumeService.extractText(file);
 
-        resumeService.saveResume( user, file, extractedText);
+        resumeService.saveResume(user, file, extractedText);
 
-        ProfileAnalysisResponse response = profileAnalysisService.analyzeProfile( extractedText );
+        ProfileAnalysisResponse response = profileAnalysisService.analyzeProfile(extractedText);
 
-        response.setResumeText( extractedText );
+        response.setResumeText(extractedText);
 
         return response;
     }
 
     @PostMapping("/upload")
-    public ProfileAnalysisResponse uploadResume(@RequestParam("file") MultipartFile file){
+    public ProfileAnalysisResponse uploadResume(@RequestParam("file") MultipartFile file) {
 
         String extractedText = resumeService.extractText(file);
 

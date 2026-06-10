@@ -11,6 +11,7 @@ export default function AuthPage() {
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
 
   const register = async () => {
     try {
@@ -37,19 +38,13 @@ export default function AuthPage() {
 
       const data = await response.json()
 
-      localStorage.setItem("token", data.token)
+      if (!response.ok) {
+        throw new Error(data.message || "Registration failed")
+      }
 
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          userId: data.userId,
-          username: data.username,
-          email: data.email,
-          profilePictureUrl: data.profilePictureUrl
-        })
-      )
-
-      window.location.href = "/"
+      setSuccess("Registration successful! Please login with your new account.")
+      setMode("login")
+      setPassword("")
     }
     catch (err: any) {
       setError(err.message)
@@ -300,6 +295,7 @@ export default function AuthPage() {
 
           <button
             onClick={mode === "login" ? login : register}
+            disabled={loading}
             className="
             w-full
             mt-6
@@ -312,11 +308,24 @@ export default function AuthPage() {
             font-semibold
             hover:scale-[1.02]
             transition
+            disabled:opacity-50
+            disabled:cursor-not-allowed
+            disabled:hover:scale-100
+            flex
+            items-center
+            justify-center
+            gap-2
             "
           >
-            {mode === "login"
-              ? "Login"
-              : "Create Account"}
+            {loading && (
+              <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+              </svg>
+            )}
+            {loading 
+              ? (mode === "login" ? "Logging in..." : "Creating Account...") 
+              : (mode === "login" ? "Login" : "Create Account")}
           </button>
 
         </div>
@@ -358,6 +367,54 @@ export default function AuthPage() {
         </div>
 
       </div>
+
+      {error && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 transition-all duration-300">
+          <div className="bg-zinc-950 border border-zinc-800 rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl transition-all duration-300 animate-in zoom-in-95 duration-200">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-red-500/10 text-red-500 mb-4">
+              <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            
+            <h3 className="text-xl font-bold text-white mb-2">Authentication Error</h3>
+            <p className="text-sm text-zinc-400 mb-6 leading-relaxed">
+              {error}
+            </p>
+
+            <button
+              onClick={() => setError("")}
+              className="w-full py-3 bg-violet-600 hover:bg-violet-700 active:bg-violet-800 text-white text-sm font-semibold rounded-xl transition-all duration-200 shadow-lg shadow-violet-950/20"
+            >
+              Dismiss
+            </button>
+          </div>
+        </div>
+      )}
+
+      {success && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 transition-all duration-300">
+          <div className="bg-zinc-950 border border-zinc-800 rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl transition-all duration-300 animate-in zoom-in-95 duration-200">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-green-500/10 text-green-500 mb-4">
+              <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            
+            <h3 className="text-xl font-bold text-white mb-2">Success!</h3>
+            <p className="text-sm text-zinc-400 mb-6 leading-relaxed">
+              {success}
+            </p>
+
+            <button
+              onClick={() => setSuccess("")}
+              className="w-full py-3 bg-violet-600 hover:bg-violet-700 active:bg-violet-800 text-white text-sm font-semibold rounded-xl transition-all duration-200 shadow-lg shadow-violet-950/20"
+            >
+              Proceed to Login
+            </button>
+          </div>
+        </div>
+      )}
     </main>
   )
 }

@@ -33,6 +33,7 @@ export default function ProfilePage() {
   const [profileImage, setProfileImage] = useState<string | null>(null)
 
   const [interviews, setInterviews] = useState<any[]>([])
+  const [loading, setLoading] = useState(false)
 
     const loadInterviews = async (userId: number) => {
 
@@ -75,9 +76,10 @@ const totalInterviews =
   interviews.length;
 
   const handleSave = async () => {
+        if (loading) return
 
         try {
-
+            setLoading(true)
             const storedUser = JSON.parse( localStorage.getItem("user") || "{}")
 
             const response =
@@ -133,6 +135,8 @@ const totalInterviews =
             "Update failed"
             )
 
+        } finally {
+            setLoading(false)
         }
 
         }
@@ -342,6 +346,7 @@ const totalInterviews =
 
               <button
                 onClick={handleSave}
+                disabled={loading}
                 className="
                   bg-violet-600
                   hover:bg-violet-700
@@ -349,9 +354,21 @@ const totalInterviews =
                   py-3
                   rounded-xl
                   font-semibold
+                  disabled:opacity-50
+                  disabled:cursor-not-allowed
+                  flex
+                  items-center
+                  justify-center
+                  gap-2
                 "
               >
-                Save Changes
+                {loading && (
+                  <svg className="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                )}
+                {loading ? "Saving..." : "Save Changes"}
               </button>
 
             </div>

@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Moon, ChevronDown } from "lucide-react"
-import {useState, useEffect} from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image";
 
 export default function Navbar() {
@@ -16,7 +16,7 @@ export default function Navbar() {
     const storedUser = localStorage.getItem("user")
 
     if (storedUser) {
-      setUser( JSON.parse(storedUser))
+      setUser(JSON.parse(storedUser))
     }
   }, [])
 
@@ -67,12 +67,12 @@ export default function Navbar() {
             overflow-hidden
             "
           >
-            <img
-               src="/logo.png"
-               alt="Future You"
-               width={50}
-               height={50}
-               className="w-full h-full object-cover"
+            <Image
+              src="/logo.png"
+              alt="Future You"
+              width={50}
+              height={50}
+              className="w-full h-full object-cover"
             />
           </div>
 
@@ -237,20 +237,21 @@ export default function Navbar() {
                 )}
               </div>
 
-             <button
-              onClick={(e) => { e.stopPropagation()
-                localStorage.clear()
-                router.push("/auth")
-              }}
-              className="
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  localStorage.clear()
+                  router.push("/auth")
+                }}
+                className="
               text-sm
               text-red-400
               hover:text-red-300
               transition
               "
-            >
-              Logout
-            </button>
+              >
+                Logout
+              </button>
             </div>
           )}
 

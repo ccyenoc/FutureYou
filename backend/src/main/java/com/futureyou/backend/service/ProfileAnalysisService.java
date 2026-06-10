@@ -11,39 +11,30 @@ import com.futureyou.backend.prompt.ProfileAnalysisPrompt;
 
 @Service
 
-public class ProfileAnalysisService{
+public class ProfileAnalysisService {
 
     private final GeminiService geminiService;
 
-    public ProfileAnalysisService(GeminiService geminiService){
+    public ProfileAnalysisService(GeminiService geminiService) {
         this.geminiService = geminiService;
     }
 
-    public ProfileAnalysisResponse analyzeProfile(String resumeText){
+    public ProfileAnalysisResponse analyzeProfile(String resumeText) {
         try {
-            String prompt = 
-            ProfileAnalysisPrompt.SYSTEM
+            String prompt = ProfileAnalysisPrompt.SYSTEM
 
-            +
+                    +
 
-            "\n\nResume:\n"
+                    "\n\nResume:\n"
 
-            +
+                    +
 
-            resumeText;
+                    resumeText;
 
-System.out.println(
-    "Sending resume to Gemini..."
-);
+            System.out.println(
+                    "Sending resume to Gemini...");
 
             String response = geminiService.generate(prompt).trim();
-            
-            System.out.println(
-                "Gemini Response:\n"
-                +
-                response
-            );
-
 
             if (!response.startsWith("{")) {
 
@@ -52,33 +43,31 @@ System.out.println(
 
                 throw new RuntimeException("Gemini did not return valid JSON");
             }
-        ObjectMapper mapper = new ObjectMapper();
 
-        System.out.println("Gemini Response:");
-        System.out.println(response);
+            ObjectMapper mapper = new ObjectMapper();
 
-        JsonNode node = mapper.readTree(response);
+            System.out.println("Gemini Response:");
+            System.out.println(response);
 
-        return mapper.treeToValue(
-            node,
-            ProfileAnalysisResponse.class
-        );
+            JsonNode node = mapper.readTree(response);
 
-        }
-        catch(Exception err) {
+            return mapper.treeToValue(
+                    node,
+                    ProfileAnalysisResponse.class);
+
+        } catch (Exception err) {
 
             err.printStackTrace();
 
             return new ProfileAnalysisResponse(
 
-                "Unknown",
-                List.of(),
-                List.of(),
-                List.of(),
-                List.of(),
-                List.of(),
-                "Unknown"
-            );
+                    "Unknown",
+                    List.of(),
+                    List.of(),
+                    List.of(),
+                    List.of(),
+                    List.of(),
+                    "Unknown");
 
         }
 

@@ -23,8 +23,7 @@ export default function RoadmapSection({
   career,
 }: RoadmapSectionProps) {
 
-  const roadmapPhases =
-  career.roadmap
+  const roadmapPhases = career.roadmap
 
   return (
 
@@ -86,30 +85,6 @@ export default function RoadmapSection({
 
           👨
 
-          <div
-            className="
-              absolute
-              bottom-1
-              right-1
-
-              flex
-              h-14
-              w-14
-              items-center
-              justify-center
-
-              rounded-full
-
-              border-4
-              border-black
-
-              bg-emerald-400
-
-              text-xl
-            "
-          >
-            ✨
-          </div>
 
         </div>
 
@@ -289,15 +264,14 @@ export default function RoadmapSection({
                     font-bold
                     text-white
 
-                    ${
-                      index === 0
-                        ? `
+                    ${index === 0
+                      ? `
                           bg-purple-600
                           border-purple-500
                           shadow-lg
                           shadow-purple-500/50
                         `
-                        : `
+                      : `
                           bg-white/10
                           border-white/30
                           text-white/60
@@ -331,8 +305,8 @@ export default function RoadmapSection({
 
                 {/* TITLE */}
 
-                <h3   
-                className="
+                <h3
+                  className="
                 text-1xl
                 leading-tight
                 font-extrabold

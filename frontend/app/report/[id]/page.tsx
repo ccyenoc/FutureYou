@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Navbar from "@/components/layout/Navbar";
 import { useRouter } from "next/navigation";
+import { getJsonHeaders } from "@/lib/auth";
 
 export default function ReportPage() {
     const router = useRouter();
@@ -14,7 +15,9 @@ export default function ReportPage() {
 
     useEffect(() => {
 
-        fetch(`http://localhost:8080/interview/report/${id}`)
+        fetch(`http://localhost:8080/interview/report/${id}`, {
+            headers: getJsonHeaders()
+        })
             .then((res) => res.json())
             .then((data) => {
                 console.log(data);

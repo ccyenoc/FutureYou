@@ -1,24 +1,29 @@
 package com.futureyou.backend.dto;
 
+import jakarta.persistence.Column;
+
 public class QuestionReview {
 
+    @Column(columnDefinition = "TEXT")
     private String question;
 
+    @Column(columnDefinition = "TEXT")
     private String answer;
 
+    @Column(columnDefinition = "TEXT")
     private String feedback;
 
+    @Column(columnDefinition = "TEXT")
     private String suggestedAnswer;
 
     public QuestionReview() {
     }
 
     public QuestionReview(
-        String question,
-        String answer,
-        String feedback,
-        String suggestedAnswer
-    ) {
+            String question,
+            String answer,
+            String feedback,
+            String suggestedAnswer) {
         this.question = question;
         this.answer = answer;
         this.feedback = feedback;
@@ -57,5 +62,4 @@ public class QuestionReview {
         this.suggestedAnswer = suggestedAnswer;
     }
 
-    
 }

@@ -2,8 +2,8 @@
 
 import { useSearchParams, useRouter } from "next/navigation"
 import { useEffect, useRef, useState, Suspense } from "react"
-
 import Navbar from "@/components/layout/Navbar"
+import { getJsonHeaders } from "@/lib/auth"
 
 function InterviewPage() {
 
@@ -97,9 +97,7 @@ function InterviewPage() {
         "http://localhost:8080/interview/evaluate",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: getJsonHeaders(),
           body: JSON.stringify({
             userId: user?.userId,
             career,
@@ -121,6 +119,19 @@ function InterviewPage() {
   }
 
   const startInterview = async () => {
+    // Clear previous interview state and cache
+    setAnalysis(null)
+    localStorage.removeItem("latestInterviewAnalysis")
+    setCurrentQuestion(0)
+    currentQuestionRef.current = 0
+    setAnswers([])
+    answersRef.current = []
+    setQuestions([])
+    questionsRef.current = []
+    setLatestAnswer("")
+    followUpCountRef.current = 0
+    interviewEndedRef.current = false
+
     setStarted(true)
     setIsGeneratingQuestions(true)
 
@@ -397,7 +408,7 @@ function InterviewPage() {
   ========================================
 
   Overall Score: ${analysis.overallScore}
-  Technical Score: ${analysis.technicalScore}
+  Technical Score: ${analysis.professionalKnowledgeScore ?? analysis.technicalScore}
   Communication Score: ${analysis.communicationScore}
 
   ========================================
@@ -741,9 +752,15 @@ function InterviewPage() {
                 ✓
               </div>
               <h3 className="text-lg font-bold text-white mb-2">Interview Completed!</h3>
-              <p className="text-sm text-zinc-400 max-w-xs">
+              <p className="text-sm text-zinc-400 max-w-xs mb-6">
                 Your performance has been evaluated. Review the comprehensive feedback report and breakdown below.
               </p>
+              <button
+                onClick={startInterview}
+                className="rounded-xl bg-violet-600 hover:bg-violet-700 px-6 py-2.5 font-semibold text-sm transition-colors text-white"
+              >
+                Start New Interview
+              </button>
             </div>
           )}
 
@@ -827,7 +844,7 @@ function InterviewPage() {
             <div className="bg-zinc-900 rounded-2xl p-5 text-center">
               <p>Professional Knowledge</p>
               <h2 className="text-3xl font-bold">
-                {analysis.technicalScore}
+                {analysis.professionalKnowledgeScore ?? analysis.technicalScore}
               </h2>
             </div>
 

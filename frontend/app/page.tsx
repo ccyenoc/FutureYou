@@ -22,8 +22,7 @@ export default function Home() {
 
   const [profile, setProfile] = useState<any>(null)
 
-  const [selectedCareer, setSelectedCareer] =
-  useState(0)
+  const [selectedCareer, setSelectedCareer] = useState(0)
 
   const careers = profile?.careers || []
 
@@ -33,7 +32,7 @@ export default function Home() {
 
     const savedAnalysis = localStorage.getItem("careerAnalysis")
 
-    if(savedAnalysis){
+    if (savedAnalysis) {
       setProfile(JSON.parse(savedAnalysis))
     }
 
@@ -81,7 +80,7 @@ export default function Home() {
           {/* LEFT */}
 
 
-         <div className="space-y-4">
+          <div className="space-y-4">
 
             {/* CAREER SELECTOR */}
 
@@ -97,10 +96,9 @@ export default function Home() {
                     className={`
                       px-4 py-2 rounded-xl border transition-all
 
-                      ${
-                        selectedCareer === index
-                          ? "border-purple-500 bg-purple-500/10 text-purple-300"
-                          : "border-white/10 bg-white/5 text-white"
+                      ${selectedCareer === index
+                        ? "border-purple-500 bg-purple-500/10 text-purple-300"
+                        : "border-white/10 bg-white/5 text-white"
                       }
                     `}
                   >
@@ -114,7 +112,6 @@ export default function Home() {
             )}
 
             {/* ROADMAP */}
-
             {currentCareer && (
               <RoadmapSection career={currentCareer} />
             )}

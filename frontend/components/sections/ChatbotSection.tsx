@@ -771,7 +771,13 @@ export default function ChatbotSection({ career, analysis }: ChatbotSectionProps
               {msg.skillGap && (
                 <div className="flex gap-3 items-start justify-start w-full">
                   <div className="h-8 w-8 rounded-full bg-violet-900/50 flex items-center justify-center text-sm flex-shrink-0">
-                    👻
+                    <Image
+                      src="/logo.png"
+                      alt="Future You"
+                      width={50}
+                      height={50}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   <div className="flex-1 rounded-2xl border border-white/10 bg-white/5 p-5 space-y-4 max-w-[85%]">
                     <div className="flex items-center gap-2 pb-2 border-b border-white/10">
@@ -904,9 +910,13 @@ export default function ChatbotSection({ career, analysis }: ChatbotSectionProps
           {/* Dynamic Bot Loader Bubble */}
           {loading && (
             <div className="flex gap-3 items-start justify-start w-full">
-              <div className="h-8 w-8 rounded-full bg-violet-900/50 flex items-center justify-center text-sm flex-shrink-0">
-                👻
-              </div>
+              <Image
+                src="/logo.png"
+                alt="Future You"
+                width={50}
+                height={50}
+                className="w-full h-full object-cover"
+              />
               <div className="rounded-2xl border border-white/10 bg-white/5 p-4 flex items-center gap-3 max-w-[85%]">
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-violet-500 border-t-transparent flex-shrink-0" />
                 <span className="text-sm text-zinc-400">{loadingText}</span>

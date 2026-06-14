@@ -14,8 +14,19 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JWTService {
 
-    private final String SECRET =
-            "your-secret-key-your-secret-key-your-secret-key";
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(JWTService.class);
+    private final byte[] secretKeyBytes;
+
+    public JWTService(@org.springframework.beans.factory.annotation.Value("${app.jwt.secret:}") String jwtSecret) {
+        if (jwtSecret == null || jwtSecret.trim().isEmpty() || jwtSecret.equals("your-secret-key-your-secret-key-your-secret-key")) {
+            logger.warn("Generating ephemeral secret. Instance-isolated!");
+            byte[] keyBytes = new byte[32];
+            new java.security.SecureRandom().nextBytes(keyBytes);
+            this.secretKeyBytes = keyBytes;
+        } else {
+            this.secretKeyBytes = jwtSecret.getBytes();
+        }
+    }
 
     public String generateToken(User user) {
 
@@ -32,7 +43,7 @@ public class JWTService {
                 )
                 .signWith(
                         Keys.hmacShaKeyFor(
-                                SECRET.getBytes()
+                                secretKeyBytes
                         )
                 )
                 .compact();
@@ -41,7 +52,7 @@ public class JWTService {
     public Long extractUserId(String token) {
 
         Claims claims = Jwts.parser().verifyWith(
-                Keys.hmacShaKeyFor(SECRET.getBytes()))
+                Keys.hmacShaKeyFor(secretKeyBytes))
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();

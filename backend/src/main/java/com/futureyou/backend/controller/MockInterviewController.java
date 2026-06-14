@@ -63,7 +63,17 @@ public class MockInterviewController{
                 );
 
         if (request.getUserId() != null) {
-            User user = userService.getUserById( request.getUserId() );
+            org.springframework.security.core.Authentication auth = 
+                    org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+            if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
+                throw new RuntimeException("Unauthorized: Must login to save interview evaluation.");
+            }
+            Long authenticatedUserId = (Long) auth.getPrincipal();
+            if (!request.getUserId().equals(authenticatedUserId)) {
+                throw new RuntimeException("Unauthorized user ID mismatch.");
+            }
+
+            User user = userService.getUserById( authenticatedUserId );
 
             interviewService.saveInterview(
                     user,
@@ -77,12 +87,23 @@ public class MockInterviewController{
 
     @GetMapping("/user/{userId}")
     public List<Interview> getUserInterviews(@PathVariable Long userId){
+        Long authenticatedUserId = (Long) org.springframework.security.core.context.SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
+        if (!userId.equals(authenticatedUserId)) {
+            throw new RuntimeException("Unauthorized: Cannot view another user's interview history.");
+        }
         return interviewService.getUserInterview(userId);
     }
 
     @GetMapping("/report/{interviewId}")
     public InterviewReportResponse getInterviewReport(@PathVariable Long interviewId) {
-        return interviewService.getInterviewReport( interviewId);
+        Long authenticatedUserId = (Long) org.springframework.security.core.context.SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
+        InterviewReportResponse report = interviewService.getInterviewReport( interviewId);
+        if (report.getInterview().getUser() != null && !report.getInterview().getUser().getId().equals(authenticatedUserId)) {
+            throw new RuntimeException("Unauthorized: You do not own this interview report.");
+        }
+        return report;
     }
 
 }

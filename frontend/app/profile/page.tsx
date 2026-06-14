@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 
 import Navbar from "@/components/layout/Navbar"
+import { getJsonHeaders } from "@/lib/auth"
 
 
 export default function ProfilePage() {
@@ -40,12 +41,15 @@ export default function ProfilePage() {
     try {
 
         const response = await fetch(
-        `http://localhost:8080/interview/user/${userId}`
+        `http://localhost:8080/interview/user/${userId}`,
+        {
+            headers: getJsonHeaders()
+        }
         )
 
         const data = await response.json()
-
-        setInterviews(data)
+        const sortedData = [...data].sort((a: any, b: any) => b.id - a.id)
+        setInterviews(sortedData)
 
         console.log("INTERVIEWS : ",data)
 
@@ -87,11 +91,7 @@ const totalInterviews =
                 `http://localhost:8080/users/${storedUser.userId}`,
                 {
                 method: "PUT",
-
-                headers: {
-                    "Content-Type":
-                    "application/json"
-                },
+                headers: getJsonHeaders(),
 
                 body: JSON.stringify({
                     username,
@@ -481,8 +481,16 @@ const totalInterviews =
                       {interview.career}
                     </h3>
 
-                    <p className="text-zinc-400">
-                      {interview.date}
+                    <p className="text-zinc-400 text-sm mt-1">
+                      {interview.createdAt
+                        ? new Date(interview.createdAt).toLocaleDateString(undefined, {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit"
+                          })
+                        : "No date"}
                     </p>
 
                   </div>

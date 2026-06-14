@@ -3,45 +3,45 @@
 import { User, Heart, Grid3X3, ArrowRight, Sparkles } from "lucide-react"
 
 type DiscoverSectionProps = {
-  profile : any
+  profile: any
 }
 
 
-export default function DiscoverSection({profile} : DiscoverSectionProps) {
+export default function DiscoverSection({ profile }: DiscoverSectionProps) {
 
   const discoverItems = [
 
-  {
-    id: "strengths",
-    icon: User,
-    title: "Your Strengths",
-    subtitle: "What you're good at",
-    items: profile?.strengths || [],
-    color: "text-blue-400",
-    bgColor: "from-blue-500/10 to-blue-500/5"
-  },
+    {
+      id: "strengths",
+      icon: User,
+      title: "Your Strengths",
+      subtitle: "What you're good at",
+      items: profile?.strengths || [],
+      color: "text-blue-400",
+      bgColor: "from-blue-500/10 to-blue-500/5"
+    },
 
-  {
-    id: "interests",
-    icon: Heart,
-    title: "Your Interests",
-    subtitle: "What excites you",
-    items: profile?.interests || [],
-    color: "text-pink-400",
-    bgColor: "from-pink-500/10 to-pink-500/5"
-  },
+    {
+      id: "interests",
+      icon: Heart,
+      title: "Your Interests",
+      subtitle: "What excites you",
+      items: profile?.interests || [],
+      color: "text-pink-400",
+      bgColor: "from-pink-500/10 to-pink-500/5"
+    },
 
-  {
-    id: "workstyle",
-    icon: Grid3X3,
-    title: "Your Work Style",
-    subtitle: "How you like to work",
-    items: profile?.workStyle || [],
-    color: "text-emerald-400",
-    bgColor: "from-emerald-500/10 to-emerald-500/5"
-  }
+    {
+      id: "workstyle",
+      icon: Grid3X3,
+      title: "Your Work Style",
+      subtitle: "How you like to work",
+      items: profile?.workStyle || [],
+      color: "text-emerald-400",
+      bgColor: "from-emerald-500/10 to-emerald-500/5"
+    }
 
-]
+  ]
 
   return (
     <div className="rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-white/[0.02] p-8">
@@ -86,11 +86,6 @@ export default function DiscoverSection({profile} : DiscoverSectionProps) {
                 ))}
               </div>
 
-              {/* View Analysis Link */}
-              <button className="flex items-center gap-2 text-xs font-semibold text-purple-400 hover:text-purple-300 transition-colors">
-                View Full Analysis
-                <ArrowRight className="h-3 w-3" />
-              </button>
             </div>
           )
         })}

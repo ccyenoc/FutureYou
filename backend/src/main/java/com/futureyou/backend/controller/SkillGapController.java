@@ -17,27 +17,20 @@ public class SkillGapController {
 
     private final SkillGapService service;
 
-    public SkillGapController(
-        SkillGapService service
-    ) {
+    public SkillGapController(SkillGapService service) {
         this.service = service;
     }
 
     @PostMapping
-    public SkillGapResponse analyze(
-        @RequestBody SkillGapRequest request
-    ) {
+    public SkillGapResponse analyze(@RequestBody SkillGapRequest request) {
 
         return service.analyze(
-            request.getCareer(),
-            String.join(
-                ", ",
-                request.getSkills()
-            ),
-            String.join(
-                ", ",
-                request.getStrengths()
-            )
-        );
+                request.getCareer(),
+                String.join(
+                        ", ",
+                        request.getSkills()),
+                String.join(
+                        ", ",
+                        request.getStrengths()));
     }
 }

@@ -17,108 +17,88 @@ public class JSearchService {
     @Value("${jsearch.api.key}")
     private String apiKey;
 
-    private final RestTemplate restTemplate =
-        new RestTemplate();
+    private final RestTemplate restTemplate = new RestTemplate();
 
     public String searchJobs(
-        String career,
-        String jobType,
-        String region
-    ) {
+            String career,
+            String jobType,
+            String region) {
 
         try {
 
-            // Normalize career titles
-            String query = career;
+            // normalize career titles by removing parenthetical details (e.g., "Full-Stack
+            String query = career != null ? career.replaceAll("\\s*\\([^)]*\\)", "").trim() : "";
 
-            if (career.toLowerCase().contains("full-stack")) {
-                query = "Full Stack Developer";
-            }
-            else if (career.toLowerCase().contains("mobile")) {
-                query = "Mobile Developer";
-            }
-            else if (career.toLowerCase().contains("ai")) {
-                query = "Software Engineer";
-            }
+            // country mapping
+            String country = getCountryCode(region);
 
-            // Country mapping
-            String country = "my";
+            String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
 
-            if (region != null && !region.isBlank()) {
-
-                if (region.equalsIgnoreCase("Singapore")) {
-                    country = "sg";
-                }
-                else if (
-                    region.equalsIgnoreCase("United States")
-                    || region.equalsIgnoreCase("USA")
-                ) {
-                    country = "us";
-                }
-                else if (
-                    region.equalsIgnoreCase("United Kingdom")
-                    || region.equalsIgnoreCase("UK")
-                ) {
-                    country = "gb";
-                }
-            }
-
-            String encodedQuery =
-                URLEncoder.encode(
-                    query,
-                    StandardCharsets.UTF_8
-                );
-
-            String url =
-                "https://jsearch.p.rapidapi.com/search"
-                + "?query=" + encodedQuery
-                + "&page=1"
-                + "&num_pages=1"
-                + "&country=" + country
-                + "&date_posted=all";
+            String url = "https://jsearch.p.rapidapi.com/search"
+                    + "?query=" + encodedQuery
+                    + "&page=1"
+                    + "&num_pages=1"
+                    + "&country=" + country
+                    + "&date_posted=all";
 
             System.out.println("JSEARCH URL:");
             System.out.println(url);
 
-            HttpHeaders headers =
-                new HttpHeaders();
+            HttpHeaders headers = new HttpHeaders();
 
-            headers.set(
-                "X-RapidAPI-Key",
-                apiKey
-            );
+            headers.set("X-RapidAPI-Key", apiKey);
 
-            headers.set(
-                "X-RapidAPI-Host",
-                "jsearch.p.rapidapi.com"
-            );
+            headers.set("X-RapidAPI-Host", "jsearch.p.rapidapi.com");
 
-            HttpEntity<String> entity =
-                new HttpEntity<>(headers);
+            HttpEntity<String> entity = new HttpEntity<>(headers);
 
-            ResponseEntity<String> response =
-                restTemplate.exchange(
+            ResponseEntity<String> response = restTemplate.exchange(
                     url,
                     HttpMethod.GET,
                     entity,
-                    String.class
-                );
+                    String.class);
 
             System.out.println("RAW JSEARCH RESPONSE:");
             System.out.println(response.getBody());
 
             return response.getBody();
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
 
             e.printStackTrace();
 
             return """
-            {
-              "data":[]
-            }
-            """;
+                    {
+                      "data":[]
+                    }
+                    """;
         }
+    }
+
+    private String getCountryCode(String region) {
+        if (region == null || region.isBlank()) {
+            return "my";
+        }
+
+        String cleanedRegion = region.trim();
+
+        // direct mapping for common abbreviations
+        if (cleanedRegion.equalsIgnoreCase("USA") || cleanedRegion.equalsIgnoreCase("US")) {
+            return "us";
+        }
+        if (cleanedRegion.equalsIgnoreCase("UK") || cleanedRegion.equalsIgnoreCase("United Kingdom")) {
+            return "gb";
+        }
+
+        // dynamic lookup using Java's Locale
+        for (String countryCode : java.util.Locale.getISOCountries()) {
+            java.util.Locale locale = new java.util.Locale("", countryCode);
+            if (locale.getDisplayCountry(java.util.Locale.ENGLISH).equalsIgnoreCase(cleanedRegion)
+                    || locale.getDisplayCountry().equalsIgnoreCase(cleanedRegion)) {
+                return countryCode.toLowerCase();
+            }
+        }
+
+        return "my"; // default fallback if no match is found - malaysia
     }
 }

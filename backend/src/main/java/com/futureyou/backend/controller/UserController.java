@@ -24,6 +24,11 @@ public class UserController {
 
     @PutMapping("/{id}")
     public User updateProfile( @PathVariable Long id, @RequestBody UpdateProfileRequest request) {
+        Long authenticatedUserId = (Long) org.springframework.security.core.context.SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
+        if (!id.equals(authenticatedUserId)) {
+            throw new RuntimeException("Unauthorized: You cannot update another user's profile.");
+        }
         return userService.updateProfile( id, request );
     }
 }

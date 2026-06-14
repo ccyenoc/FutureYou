@@ -12,47 +12,41 @@ public class SkillGapService {
     private final GeminiService geminiService;
 
     public SkillGapService(
-        GeminiService geminiService
-    ) {
+            GeminiService geminiService) {
         this.geminiService = geminiService;
     }
 
     public SkillGapResponse analyze(
-        String career,
-        String skills,
-        String strengths
-    ) {
+            String career,
+            String skills,
+            String strengths) {
 
         try {
 
-            String prompt =
-            SkillGapPrompt.SYSTEM
-            +
-            "\n\nCareer:\n"
-            +
-            career
-            +
-            "\n\nSkills:\n"
-            +
-            skills
-            +
-            "\n\nStrengths:\n"
-            +
-            strengths;
+            String prompt = SkillGapPrompt.SYSTEM
+                    +
+                    "\n\nCareer:\n"
+                    +
+                    career
+                    +
+                    "\n\nSkills:\n"
+                    +
+                    skills
+                    +
+                    "\n\nStrengths:\n"
+                    +
+                    strengths;
 
-            String response =
-            geminiService.generate(prompt)
-            .replace("```json", "")
-            .replace("```", "")
-            .trim();
+            String response = geminiService.generate(prompt)
+                    .replace("```json", "")
+                    .replace("```", "")
+                    .trim();
 
-            ObjectMapper mapper =
-            new ObjectMapper();
+            ObjectMapper mapper = new ObjectMapper();
 
             return mapper.readValue(
-                response,
-                SkillGapResponse.class
-            );
+                    response,
+                    SkillGapResponse.class);
 
         } catch (Exception e) {
 

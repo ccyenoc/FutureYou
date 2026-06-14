@@ -25,9 +25,6 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(org.springframework.security.config.http.SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/resume/upload").permitAll()
-                        .requestMatchers("/interview/ask", "/interview/respond", "/interview/evaluate").permitAll()
-                        .requestMatchers("/chat/**", "/skill-gap/**", "/courses/**", "/jobs/**").permitAll()
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
                 )

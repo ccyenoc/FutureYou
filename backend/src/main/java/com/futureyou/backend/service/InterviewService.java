@@ -19,25 +19,26 @@ public class InterviewService {
     private final InterviewRepository interviewRepository;
     private final QuestionReviewRepository questionReviewRepository;
 
-    public InterviewService( InterviewRepository interviewRepository, QuestionReviewRepository questionReviewRepository) {
+    public InterviewService(InterviewRepository interviewRepository,
+            QuestionReviewRepository questionReviewRepository) {
         this.interviewRepository = interviewRepository;
         this.questionReviewRepository = questionReviewRepository;
     }
 
-    public Interview saveInterview( User user, String career, InterviewEvaluationResponse response) {
+    public Interview saveInterview(User user, String career, InterviewEvaluationResponse response) {
 
         Interview interview = new Interview();
 
         interview.setUser(user);
         interview.setCareer(career);
 
-        interview.setOverallScore( response.getOverallScore());
+        interview.setOverallScore(response.getOverallScore());
 
-        interview.setProfessionalKnowledgeScore( response.getProfessionalKnowledgeScore());
+        interview.setProfessionalKnowledgeScore(response.getProfessionalKnowledgeScore());
 
-         interview.setCommunicationScore( response.getCommunicationScore());
+        interview.setCommunicationScore(response.getCommunicationScore());
 
-        interview.setCreatedAt( LocalDateTime.now());
+        interview.setCreatedAt(LocalDateTime.now());
 
         Interview savedInterview = interviewRepository.save(interview);
 
@@ -45,15 +46,15 @@ public class InterviewService {
 
             QuestionReview entity = new QuestionReview();
 
-            entity.setQuestion( review.getQuestion());
+            entity.setQuestion(review.getQuestion());
 
-            entity.setAnswer( review.getAnswer());
+            entity.setAnswer(review.getAnswer());
 
-            entity.setFeedback( review.getFeedback());
+            entity.setFeedback(review.getFeedback());
 
-            entity.setSuggestedAnswer( review.getSuggestedAnswer());
+            entity.setSuggestedAnswer(review.getSuggestedAnswer());
 
-            entity.setInterview( savedInterview );
+            entity.setInterview(savedInterview);
 
             questionReviewRepository.save(entity);
         }
@@ -62,13 +63,13 @@ public class InterviewService {
     }
 
     public List<Interview> getUserInterview(Long userId) {
-     return interviewRepository.findByUserId(userId);
+        return interviewRepository.findByUserId(userId);
     }
 
-    public InterviewReportResponse getInterviewReport( Long interviewId) {
+    public InterviewReportResponse getInterviewReport(Long interviewId) {
 
         Interview interview = interviewRepository.findById(interviewId)
-        .orElseThrow( () -> new RuntimeException( "Interview not found" ) );
+                .orElseThrow(() -> new RuntimeException("Interview not found"));
 
         List<QuestionReview> reviews = questionReviewRepository.findByInterviewId(interviewId);
 
@@ -77,6 +78,6 @@ public class InterviewService {
         response.setInterview(interview);
         response.setReviews(reviews);
 
-    return response;
-}
+        return response;
+    }
 }

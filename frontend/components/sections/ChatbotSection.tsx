@@ -15,6 +15,7 @@ import Image from "next/image";
 import { useState, useEffect, useRef } from "react"
 
 import { useRouter } from "next/navigation"
+import { getJsonHeaders } from "@/lib/auth"
 
 type Career = {
   title: string
@@ -100,10 +101,7 @@ export default function ChatbotSection({ career, analysis }: ChatbotSectionProps
         {
           method: "POST",
 
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
+          headers: getJsonHeaders(),
 
           body: JSON.stringify({
             message: current
@@ -176,10 +174,7 @@ export default function ChatbotSection({ career, analysis }: ChatbotSectionProps
             {
               method: "POST",
 
-              headers: {
-                "Content-Type":
-                  "application/json"
-              },
+              headers: getJsonHeaders(),
 
               body: JSON.stringify({
                 career: career.title
@@ -225,10 +220,7 @@ export default function ChatbotSection({ career, analysis }: ChatbotSectionProps
             {
               method: "POST",
 
-              headers: {
-                "Content-Type":
-                  "application/json"
-              },
+              headers: getJsonHeaders(),
 
               body: JSON.stringify({
                 career: career.title,
@@ -279,10 +271,7 @@ export default function ChatbotSection({ career, analysis }: ChatbotSectionProps
         {
           method: "POST",
 
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
+          headers: getJsonHeaders(),
 
           body: JSON.stringify({
             career: career.title,

@@ -14,6 +14,11 @@ export default function ReportPage() {
     const [report, setReport] = useState<any>(null);
 
     useEffect(() => {
+        const user = localStorage.getItem("user");
+        if (!user) {
+            router.push("/auth");
+            return;
+        }
 
         fetch(`http://localhost:8080/interview/report/${id}`, {
             headers: getJsonHeaders()

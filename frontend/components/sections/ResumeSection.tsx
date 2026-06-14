@@ -39,28 +39,14 @@ export default function ResumeSection({ setProfile }: ResumeSectionProps) {
     try {
       setLoading(true)
 
-      if (user) {
-
-        response = await fetch(
-          "http://localhost:8080/resume/upload-save",
-          {
-            method: "POST",
-            headers: getMultipartHeaders(),
-            body: formData
-          }
-        )
-
-      } else {
-
-        response = await fetch(
-          "http://localhost:8080/resume/upload",
-          {
-            method: "POST",
-            body: formData
-          }
-        )
-
-      }
+      response = await fetch(
+        "http://localhost:8080/resume/upload-save",
+        {
+          method: "POST",
+          headers: getMultipartHeaders(),
+          body: formData
+        }
+      )
       const data = await response.json()
 
       localStorage.setItem("resumeText", data.resumeText)

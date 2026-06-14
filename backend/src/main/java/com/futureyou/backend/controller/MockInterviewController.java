@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.futureyou.backend.dto.InterviewEvaluationRequest;
 import com.futureyou.backend.dto.InterviewEvaluationResponse;
@@ -24,71 +25,57 @@ import com.futureyou.backend.service.UserService;
 
 @RestController
 @RequestMapping("/interview")
-public class MockInterviewController{
+public class MockInterviewController {
 
     private MockInterviewService mockInterviewService;
     private final InterviewService interviewService;
     private final UserService userService;
 
-    
-    public MockInterviewController(MockInterviewService mockInterviewService, InterviewService interviewService, UserService userService){
+    public MockInterviewController(MockInterviewService mockInterviewService, InterviewService interviewService,
+            UserService userService) {
         this.mockInterviewService = mockInterviewService;
         this.interviewService = interviewService;
         this.userService = userService;
     }
+
     @PostMapping("/ask")
-    public MockInterviewResponse generateInterviewQuestion(@RequestBody MockInterviewRequest request){
-         return mockInterviewService.ask(request.getCareer() , request.getResumeText());
+    public MockInterviewResponse generateInterviewQuestion(@RequestBody MockInterviewRequest request) {
+        return mockInterviewService.ask(request.getCareer(), request.getResumeText());
     }
 
     @PostMapping("/respond")
-    public InterviewResponseResponse respond( @RequestBody InterviewResponseRequest request){
+    public InterviewResponseResponse respond(@RequestBody InterviewResponseRequest request) {
         return mockInterviewService.respond(
-            request.getCareer(),
-            request.getCurrentQuestion(),
-            request.getAnswer(),
-            request.getResumeText()
-        );
+                request.getCareer(),
+                request.getCurrentQuestion(),
+                request.getAnswer(),
+                request.getResumeText());
     }
 
     @PostMapping("/evaluate")
-    public InterviewEvaluationResponse evaluate( @RequestBody InterviewEvaluationRequest request ) {
+    public InterviewEvaluationResponse evaluate(@RequestBody InterviewEvaluationRequest request) {
 
-        InterviewEvaluationResponse response =
-                mockInterviewService.evaluate(
-                        request.getCareer(),
-                        request.getQuestions(),
-                        request.getAnswers(),
-                        request.getResumeText()
-                );
+        Long authenticatedUserId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if (request.getUserId() != null) {
-            org.springframework.security.core.Authentication auth = 
-                    org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
-            if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
-                throw new RuntimeException("Unauthorized: Must login to save interview evaluation.");
-            }
-            Long authenticatedUserId = (Long) auth.getPrincipal();
-            if (!request.getUserId().equals(authenticatedUserId)) {
-                throw new RuntimeException("Unauthorized user ID mismatch.");
-            }
+        InterviewEvaluationResponse response = mockInterviewService.evaluate(
+                request.getCareer(),
+                request.getQuestions(),
+                request.getAnswers(),
+                request.getResumeText());
 
-            User user = userService.getUserById( authenticatedUserId );
+        User user = userService.getUserById(authenticatedUserId);
 
-            interviewService.saveInterview(
-                    user,
-                    request.getCareer(),
-                    response
-            );
-        }
+        interviewService.saveInterview(
+                user,
+                request.getCareer(),
+                response);
 
         return response;
     }
 
     @GetMapping("/user/{userId}")
-    public List<Interview> getUserInterviews(@PathVariable Long userId){
-        Long authenticatedUserId = (Long) org.springframework.security.core.context.SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal();
+    public List<Interview> getUserInterviews(@PathVariable Long userId) {
+        Long authenticatedUserId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (!userId.equals(authenticatedUserId)) {
             throw new RuntimeException("Unauthorized: Cannot view another user's interview history.");
         }
@@ -97,10 +84,10 @@ public class MockInterviewController{
 
     @GetMapping("/report/{interviewId}")
     public InterviewReportResponse getInterviewReport(@PathVariable Long interviewId) {
-        Long authenticatedUserId = (Long) org.springframework.security.core.context.SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal();
-        InterviewReportResponse report = interviewService.getInterviewReport( interviewId);
-        if (report.getInterview().getUser() != null && !report.getInterview().getUser().getId().equals(authenticatedUserId)) {
+        Long authenticatedUserId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        InterviewReportResponse report = interviewService.getInterviewReport(interviewId);
+        if (report.getInterview().getUser() != null
+                && !report.getInterview().getUser().getId().equals(authenticatedUserId)) {
             throw new RuntimeException("Unauthorized: You do not own this interview report.");
         }
         return report;

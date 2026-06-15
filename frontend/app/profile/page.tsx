@@ -37,11 +37,12 @@ export default function ProfilePage() {
 
   const [interviews, setInterviews] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
+  const [navigatingReportId, setNavigatingReportId] = useState<number | null>(null)
+  const [loadingInterviews, setLoadingInterviews] = useState(true)
 
   const loadInterviews = async (userId: number) => {
-
     try {
-
+      setLoadingInterviews(true)
       const response = await fetch(
         `http://localhost:8080/interview/user/${userId}`,
         {
@@ -57,6 +58,8 @@ export default function ProfilePage() {
 
     } catch (err) {
       console.error(err)
+    } finally {
+      setLoadingInterviews(false)
     }
   }
 
@@ -467,75 +470,104 @@ export default function ProfilePage() {
 
             <div className="space-y-4">
 
-              {interviews.map(
-                (interview) => (
-
-                  <div
-                    key={interview.id}
-                    className="
-                    bg-zinc-800
-                    rounded-xl
-                    p-5
-                    flex
-                    justify-between
-                    items-center
-                  "
-                  >
-
-                    <div>
-
-                      <h3 className="font-semibold">
-                        {interview.career}
-                      </h3>
-
-                      <p className="text-zinc-400 text-sm mt-1">
-                        {interview.createdAt
-                          ? new Date(interview.createdAt).toLocaleDateString(undefined, {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit"
-                          })
-                          : "No date"}
-                      </p>
-
-                    </div>
+              {loadingInterviews ? (
+                <div className="flex flex-col items-center justify-center py-12 gap-3">
+                  <div className="h-8 w-8 animate-spin rounded-full border-2 border-violet-500 border-t-transparent" />
+                  <p className="text-zinc-500 text-sm font-medium">Fetching interview history...</p>
+                </div>
+              ) : interviews.length > 0 ? (
+                interviews.map(
+                  (interview) => (
 
                     <div
+                      key={interview.id}
                       className="
+                      bg-zinc-800
+                      rounded-xl
+                      p-5
                       flex
+                      justify-between
                       items-center
-                      gap-4
                     "
                     >
 
-                      <p
-                        className="
-                        font-bold
-                        text-green-400
-                      "
-                      >
-                        {interview.overallScore}
-                      </p>
+                      <div>
 
-                      <button
-                        onClick={() => router.push(`/report/${interview.id}`)}
+                        <h3 className="font-semibold">
+                          {interview.career}
+                        </h3>
+
+                        <p className="text-zinc-400 text-sm mt-1">
+                          {interview.createdAt
+                            ? new Date(interview.createdAt).toLocaleDateString(undefined, {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                              hour: "2-digit",
+                              minute: "2-digit"
+                            })
+                            : "No date"}
+                        </p>
+
+                      </div>
+
+                      <div
                         className="
-                        bg-violet-600
-                        px-4
-                        py-2
-                        rounded-lg
+                        flex
+                        items-center
+                        gap-4
                       "
                       >
-                        View Report
-                      </button>
+
+                        <p
+                          className="
+                          font-bold
+                          text-green-400
+                        "
+                        >
+                          {interview.overallScore}
+                        </p>
+
+                        <button
+                          onClick={() => {
+                            setNavigatingReportId(interview.id)
+                            router.push(`/report/${interview.id}`)
+                          }}
+                          disabled={navigatingReportId !== null}
+                          className="
+                          bg-violet-600
+                          hover:bg-violet-700
+                          disabled:opacity-75
+                          disabled:cursor-wait
+                          px-4
+                          py-2
+                          rounded-lg
+                          flex
+                          items-center
+                          gap-2
+                          transition-all
+                          active:scale-[0.98]
+                        "
+                        >
+                          {navigatingReportId === interview.id && (
+                            <svg className="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                            </svg>
+                          )}
+                          {navigatingReportId === interview.id ? "Loading..." : "View Report"}
+                        </button>
+
+                      </div>
 
                     </div>
 
-                  </div>
-
+                  )
                 )
+              ) : (
+                <div className="text-center py-8 text-zinc-500 italic text-sm">
+                  No interview history found. Complete an interview to see it here!
+                </div>
               )}
 
             </div>

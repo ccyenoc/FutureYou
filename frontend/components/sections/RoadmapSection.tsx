@@ -130,30 +130,25 @@ export default function RoadmapSection({
                   p-4
                   flex
                   flex-col
-                  justify-between
                 "
               >
-                <div>
-                  <p className="text-sm text-purple-300 font-medium">
-                    Future Potential
+                <p className="text-sm text-purple-300 font-medium">
+                  Future Potential
+                </p>
+                <h2 className="mt-2 text-3xl font-bold text-white">
+                  {career.futurePotential}%
+                </h2>
+                <div className="h-1.5 w-full bg-purple-950/50 rounded-full overflow-hidden mt-3">
+                  <div
+                    className="h-full bg-purple-500 rounded-full"
+                    style={{ width: `${career.futurePotential}%` }}
+                  />
+                </div>
+                {career.futurePotentialReason && (
+                  <p className="text-[11px] text-purple-300/85 mt-3 leading-relaxed font-medium">
+                    {career.futurePotentialReason}
                   </p>
-                  <h2 className="mt-2 text-3xl font-bold text-white">
-                    {career.futurePotential}%
-                  </h2>
-                </div>
-                <div className="mt-3">
-                  <div className="h-1.5 w-full bg-purple-950/50 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-purple-500 rounded-full"
-                      style={{ width: `${career.futurePotential}%` }}
-                    />
-                  </div>
-                  {career.futurePotentialReason && (
-                    <p className="text-[11px] text-purple-300/85 mt-1.5 leading-relaxed font-medium">
-                      {career.futurePotentialReason}
-                    </p>
-                  )}
-                </div>
+                )}
               </div>
 
               <div
@@ -165,30 +160,25 @@ export default function RoadmapSection({
                   p-4
                   flex
                   flex-col
-                  justify-between
                 "
               >
-                <div>
-                  <p className="text-sm text-green-300 font-medium">
-                    Salary Potential
+                <p className="text-sm text-green-300 font-medium">
+                  Salary Potential
+                </p>
+                <h2 className="mt-2 text-3xl font-bold text-white">
+                  {career.salaryPotential}%
+                </h2>
+                <div className="h-1.5 w-full bg-green-950/50 rounded-full overflow-hidden mt-3">
+                  <div
+                    className="h-full bg-green-500 rounded-full"
+                    style={{ width: `${career.salaryPotential}%` }}
+                  />
+                </div>
+                {career.salaryPotentialReason && (
+                  <p className="text-[11px] text-green-300/85 mt-3 leading-relaxed font-medium">
+                    {career.salaryPotentialReason}
                   </p>
-                  <h2 className="mt-2 text-3xl font-bold text-white">
-                    {career.salaryPotential}%
-                  </h2>
-                </div>
-                <div className="mt-3">
-                  <div className="h-1.5 w-full bg-green-950/50 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-green-500 rounded-full"
-                      style={{ width: `${career.salaryPotential}%` }}
-                    />
-                  </div>
-                  {career.salaryPotentialReason && (
-                    <p className="text-[11px] text-green-300/85 mt-1.5 leading-relaxed font-medium">
-                      {career.salaryPotentialReason}
-                    </p>
-                  )}
-                </div>
+                )}
               </div>
 
               <div
@@ -200,30 +190,25 @@ export default function RoadmapSection({
                   p-4
                   flex
                   flex-col
-                  justify-between
                 "
               >
-                <div>
-                  <p className="text-sm text-pink-300 font-medium">
-                    Growth Potential
+                <p className="text-sm text-pink-300 font-medium">
+                  Growth Potential
+                </p>
+                <h2 className="mt-2 text-3xl font-bold text-white">
+                  {career.growthPotential}%
+                </h2>
+                <div className="h-1.5 w-full bg-pink-950/50 rounded-full overflow-hidden mt-3">
+                  <div
+                    className="h-full bg-pink-500 rounded-full"
+                    style={{ width: `${career.growthPotential}%` }}
+                  />
+                </div>
+                {career.growthPotentialReason && (
+                  <p className="text-[11px] text-pink-300/85 mt-3 leading-relaxed font-medium">
+                    {career.growthPotentialReason}
                   </p>
-                  <h2 className="mt-2 text-3xl font-bold text-white">
-                    {career.growthPotential}%
-                  </h2>
-                </div>
-                <div className="mt-3">
-                  <div className="h-1.5 w-full bg-pink-950/50 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-pink-500 rounded-full"
-                      style={{ width: `${career.growthPotential}%` }}
-                    />
-                  </div>
-                  {career.growthPotentialReason && (
-                    <p className="text-[11px] text-pink-300/85 mt-1.5 leading-relaxed font-medium">
-                      {career.growthPotentialReason}
-                    </p>
-                  )}
-                </div>
+                )}
               </div>
 
             </div>
@@ -416,49 +401,6 @@ export default function RoadmapSection({
           ))}
 
         </div>
-
-      </div>
-
-
-
-
-
-      {/* BUTTON */}
-
-      <div className="mt-10 flex justify-center">
-
-        <button
-          className="
-            flex
-            items-center
-            gap-2
-
-            text-sm
-            font-semibold
-            text-purple-400
-
-            transition-colors
-            hover:text-purple-300
-          "
-        >
-
-          View Full Roadmap
-
-          <svg
-            className="h-4 w-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
-
-        </button>
 
       </div>
 

@@ -14,7 +14,10 @@ function InterviewPage() {
 
   const career = params.get("career")
 
+  // videoRef: Refers to the <video> DOM element rendering the user's webcam feed.
   const videoRef = useRef<HTMLVideoElement>(null)
+
+  // streamRef: Holds the active webcam MediaStream so we can programmatically stop the track (and turn off the camera light) when leaving or completing the interview.
   const streamRef = useRef<MediaStream | null>(null)
 
   const [started, setStarted] = useState(false)
@@ -22,16 +25,30 @@ function InterviewPage() {
   const [questions, setQuestions] = useState<string[]>([])
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<string[]>([])
+
+  // --- SPEECH API & STATE REFS ---
+  // holds the Web Speech API's SpeechRecognition instance to control mic listening across re-renders.
   const recognitionRef = useRef<any>(null)
+
+  // holds the current interview questions. Copied to a ref so that async speech recognition event handlers always read the absolute latest list without stale React closures.
   const questionsRef = useRef<string[]>([])
+
+  // tracks the index of the active question, preventing stale state snapshot issues inside async callbacks.
   const currentQuestionRef = useRef(0)
+
   const [analysis, setAnalysis] = useState<any>(null)
+
+  // tracks the user answers submitted so far, resolving the stale closure issue inside async SpeechRecognition callbacks.
   const answersRef = useRef<string[]>([])
+
   const [latestAnswer, setLatestAnswer] = useState("")
+
+  // followUpCountRef: Tracks the depth/count of consecutive Gemini follow-up questions to prevent infinite interview loops.
   const followUpCountRef = useRef(0)
+
+  // interviewEndedRef: Guards against race conditions by tracking if the interview has ended, preventing late transcripts from triggering double evaluations.
   const interviewEndedRef = useRef(false)
 
-  // Loading and UX States
   const [isGeneratingQuestions, setIsGeneratingQuestions] = useState(false)
   const [isProcessingAnswer, setIsProcessingAnswer] = useState(false)
   const [isEvaluating, setIsEvaluating] = useState(false)

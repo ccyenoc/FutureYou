@@ -41,41 +41,11 @@ export default function ReportPage() {
 
     if (!report) {
         return (
-            <div className="min-h-screen bg-black text-white">
+            <div className="min-h-screen bg-black text-white flex flex-col">
                 <Navbar />
-                <div className="max-w-6xl mx-auto px-6 py-8">
-                    {/* Header Skeleton */}
-                    <div className="flex items-center gap-4 mb-6">
-                        <div className="h-10 w-12 rounded-xl bg-white/[0.05] animate-pulse" />
-                        <div className="space-y-2 flex-1">
-                            <div className="h-8 w-48 rounded-lg bg-white/[0.05] animate-pulse" />
-                            <div className="h-4 w-32 rounded-lg bg-white/[0.05] animate-pulse" />
-                        </div>
-                    </div>
-
-                    {/* Scores Skeleton */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
-                        {[1, 2, 3].map((i) => (
-                            <div key={i} className="h-28 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 animate-pulse space-y-3">
-                                <div className="h-4 w-28 rounded bg-white/[0.05]" />
-                                <div className="h-8 w-16 rounded bg-white/[0.05]" />
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Feedback Blocks Skeleton */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                        {[1, 2, 3].map((i) => (
-                            <div key={i} className="h-48 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 animate-pulse space-y-4">
-                                <div className="h-6 w-24 rounded bg-white/[0.05]" />
-                                <div className="space-y-2">
-                                    <div className="h-3 w-full rounded bg-white/[0.05]" />
-                                    <div className="h-3 w-5/6 rounded bg-white/[0.05]" />
-                                    <div className="h-3 w-4/5 rounded bg-white/[0.05]" />
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                <div className="flex-1 flex flex-col items-center justify-center min-h-[50vh] gap-4">
+                    <div className="h-10 w-10 animate-spin rounded-full border-4 border-violet-500 border-t-transparent" />
+                    <p className="text-zinc-400 text-sm font-medium animate-pulse">Loading report...</p>
                 </div>
             </div>
         );

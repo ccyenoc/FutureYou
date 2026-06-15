@@ -3,6 +3,7 @@ package com.futureyou.backend.service;
 import java.util.Date;
 
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.futureyou.backend.entity.User;
 
@@ -10,15 +11,15 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
-
 @Service
 public class JWTService {
 
     private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(JWTService.class);
     private final byte[] secretKeyBytes;
 
-    public JWTService(@org.springframework.beans.factory.annotation.Value("${app.jwt.secret:}") String jwtSecret) {
-        if (jwtSecret == null || jwtSecret.trim().isEmpty() || jwtSecret.equals("your-secret-key-your-secret-key-your-secret-key")) {
+    public JWTService(@Value("${app.jwt.secret:}") String jwtSecret) {
+        if (jwtSecret == null || jwtSecret.trim().isEmpty()
+                || jwtSecret.equals("your-secret-key-your-secret-key-your-secret-key")) {
             logger.warn("Generating ephemeral secret. Instance-isolated!");
             byte[] keyBytes = new byte[32];
             new java.security.SecureRandom().nextBytes(keyBytes);
@@ -38,14 +39,10 @@ public class JWTService {
                 .expiration(
                         new Date(
                                 System.currentTimeMillis()
-                                        + 86400000
-                        )
-                )
+                                        + 86400000))
                 .signWith(
                         Keys.hmacShaKeyFor(
-                                secretKeyBytes
-                        )
-                )
+                                secretKeyBytes))
                 .compact();
     }
 

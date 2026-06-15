@@ -2,7 +2,6 @@
 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Moon, ChevronDown } from "lucide-react"
 import { useState, useEffect } from "react"
 import Image from "next/image";
 
@@ -123,34 +122,6 @@ export default function Navbar() {
           gap-5
           "
         >
-          {/* Theme */}
-
-          <button
-            className="
-            w-12
-            h-12
-
-            rounded-full
-
-            border
-            border-white/10
-
-            bg-white/[0.03]
-
-            flex
-            items-center
-            justify-center
-
-            hover:border-violet-500/40
-
-            transition
-            "
-          >
-            <Moon
-              size={18}
-              className="text-zinc-300"
-            />
-          </button>
 
           {/* Guest User */}
 

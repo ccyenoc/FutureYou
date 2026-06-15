@@ -419,25 +419,36 @@ function InterviewPage() {
     }
 
     const addBodyText = (label: string, text: string) => {
+      checkPageBreak(12)
       doc.setFont("helvetica", "bold")
       doc.setFontSize(10)
       doc.setTextColor(31, 41, 55) // Dark slate for label
-
-      const labelLines: string[] = doc.splitTextToSize(`${label}: `, maxLineWidth)
-      checkPageBreak(labelLines.length * 6)
-
       doc.text(`${label}:`, margin, y)
 
-      doc.setFont("helvetica", "normal")
-      doc.setTextColor(75, 85, 99) // Gray for content
-      const textLines: string[] = doc.splitTextToSize(text || "", maxLineWidth)
+      const cleanText = (text || "").trim()
+      const labelWidth = doc.getTextWidth(`${label}: `)
+      const textWidth = doc.getTextWidth(cleanText)
 
-      textLines.forEach((line) => {
-        checkPageBreak(6)
-        doc.text(line, margin + 25, y)
+      // Check if it fits inline on the same line
+      if (labelWidth + textWidth < maxLineWidth - 10 && !cleanText.includes("\n") && cleanText.length < 60) {
+        doc.setFont("helvetica", "normal")
+        doc.setTextColor(75, 85, 99) // Gray for content
+        doc.text(cleanText, margin + labelWidth, y)
+        y += 8
+      } else {
+        // Wrap to the next line, slightly indented
         y += 6
-      })
-      y += 4
+        doc.setFont("helvetica", "normal")
+        doc.setTextColor(75, 85, 99) // Gray for content
+        const textLines: string[] = doc.splitTextToSize(cleanText, maxLineWidth - 5)
+
+        textLines.forEach((line) => {
+          checkPageBreak(6)
+          doc.text(line, margin + 5, y)
+          y += 6
+        })
+        y += 4
+      }
     }
 
     // Document Header
@@ -881,8 +892,8 @@ function InterviewPage() {
             <div
               className="
               grid
-              grid-cols-2
-              md:grid-cols-4
+              grid-cols-1
+              sm:grid-cols-3
               gap-4
             "
             >

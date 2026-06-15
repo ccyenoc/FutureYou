@@ -684,7 +684,7 @@ export default function ChatbotSection({ career, analysis }: ChatbotSectionProps
                 );
               })()}
 
-              {msg.jobs && msg.jobs.length > 0 && (
+              {msg.jobs && (
                 <div className="flex gap-3 items-start justify-start w-full">
                   <div className="h-8 w-8 rounded-full bg-violet-900/50 flex items-center justify-center text-sm flex-shrink-0">
                     <Image
@@ -700,58 +700,64 @@ export default function ChatbotSection({ career, analysis }: ChatbotSectionProps
                       <Briefcase size={16} className="text-violet-400" />
                       <span className="font-bold text-white text-sm">Matching Jobs for {career.title}</span>
                     </div>
-                    <div className="space-y-3">
-                      {msg.jobs.map((job, i) => (
-                        <a
-                          key={i}
-                          href={job.url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="
-                          block
-                          rounded-xl
-                          border
-                          border-white/10
-                          bg-white/5
-                          p-4
-                          hover:border-violet-500/40
-                          transition-all
-                        "
-                        >
-                          <h4 className="font-semibold text-white">
-                            {job.title}
-                          </h4>
-                          <p className="text-sm text-violet-300 mt-1">
-                            {job.company}
-                          </p>
-                          <p className="text-sm text-zinc-400">
-                            {job.location}
-                          </p>
-                          <span
+                    {msg.jobs.length > 0 ? (
+                      <div className="space-y-3">
+                        {msg.jobs.map((job, i) => (
+                          <a
+                            key={i}
+                            href={job.url}
+                            target="_blank"
+                            rel="noreferrer"
                             className="
-                            inline-block
-                            mt-2
-                            rounded-full
-                            bg-violet-500/20
-                            px-2
-                            py-1
-                            text-xs
-                            text-violet-300
+                            block
+                            rounded-xl
+                            border
+                            border-white/10
+                            bg-white/5
+                            p-4
+                            hover:border-violet-500/40
+                            transition-all
                           "
                           >
-                            {job.type}
-                          </span>
-                          {job.summary && (
-                            <p className="text-sm text-zinc-300 mt-3">
-                              {job.summary}
+                            <h4 className="font-semibold text-white">
+                              {job.title}
+                            </h4>
+                            <p className="text-sm text-violet-300 mt-1">
+                              {job.company}
                             </p>
-                          )}
-                          <p className="text-xs text-violet-400 mt-3 font-semibold">
-                            Open Job →
-                          </p>
-                        </a>
-                      ))}
-                    </div>
+                            <p className="text-sm text-zinc-400">
+                              {job.location}
+                            </p>
+                            <span
+                              className="
+                              inline-block
+                              mt-2
+                              rounded-full
+                              bg-violet-500/20
+                              px-2
+                              py-1
+                              text-xs
+                              text-violet-300
+                            "
+                            >
+                              {job.type}
+                            </span>
+                            {job.summary && (
+                              <p className="text-sm text-zinc-300 mt-3">
+                                {job.summary}
+                              </p>
+                            )}
+                            <p className="text-xs text-violet-400 mt-3 font-semibold">
+                              Open Job →
+                            </p>
+                          </a>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-sm text-zinc-400 bg-white/[0.02] border border-white/[0.05] rounded-xl p-4">
+                        No matching jobs found.
+                      </div>
+                    )}
                   </div>
                 </div>
               )}

@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, Suspense } from "react"
 import Navbar from "@/components/layout/Navbar"
 import { getJsonHeaders } from "@/lib/auth"
 import { jsPDF } from "jspdf"
+import AlertModal from "@/components/ui/AlertModal"
 
 function InterviewPage() {
 
@@ -37,6 +38,7 @@ function InterviewPage() {
   const [isListening, setIsListening] = useState(false)
   const [micError, setMicError] = useState<string | null>(null)
   const [showStopModal, setShowStopModal] = useState(false)
+  const [modal, setModal] = useState<{ title: string; message: string; variant: "info" | "success" | "error"; onConfirm?: () => void } | null>(null)
 
   const stopCamera = () => {
 
@@ -194,8 +196,15 @@ function InterviewPage() {
         recognitionRef.current.stop()
       }
 
-      alert("Interview Completed")
-      await evaluateInterview()
+      setModal({
+        title: "Interview Completed",
+        message: "Great job! Your mock interview has ended. We are now generating your evaluation report...",
+        variant: "success",
+        onConfirm: async () => {
+          setModal(null)
+          await evaluateInterview()
+        }
+      })
     }
   }
 
@@ -269,7 +278,11 @@ function InterviewPage() {
   const submitAnswer = async () => {
     if (isProcessingAnswer || isEvaluating) return // prevent duplicates sending
     if (!latestAnswer.trim()) {
-      alert("Please speak or type your answer before submitting.")
+      setModal({
+        title: "Answer Required",
+        message: "Please speak or type your answer before submitting.",
+        variant: "info"
+      })
       return
     }
 
@@ -1114,6 +1127,13 @@ function InterviewPage() {
         </div>
       )}
 
+      <AlertModal
+        isOpen={!!modal}
+        title={modal?.title || ""}
+        message={modal?.message || ""}
+        variant={modal?.variant || "info"}
+        onClose={modal?.onConfirm ? modal.onConfirm : () => setModal(null)}
+      />
     </div>
 
   )

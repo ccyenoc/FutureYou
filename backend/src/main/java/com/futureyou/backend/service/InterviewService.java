@@ -38,6 +38,10 @@ public class InterviewService {
 
         interview.setCommunicationScore(response.getCommunicationScore());
 
+        interview.setStrengths(response.getStrengths());
+        interview.setWeaknesses(response.getWeaknesses());
+        interview.setSuggestions(response.getSuggestions());
+
         interview.setCreatedAt(LocalDateTime.now());
 
         Interview savedInterview = interviewRepository.save(interview);

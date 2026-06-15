@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,6 +32,15 @@ public class Interview {
     private Integer communicationScore;
 
     private LocalDateTime createdAt;
+
+    @Column(columnDefinition = "TEXT")
+    private String strengthsText;
+
+    @Column(columnDefinition = "TEXT")
+    private String weaknessesText;
+
+    @Column(columnDefinition = "TEXT")
+    private String suggestionsText;
 
     @OneToMany(mappedBy = "interview")
     @JsonIgnore
@@ -115,5 +125,62 @@ public class Interview {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getStrengthsText() {
+        return strengthsText;
+    }
+
+    public void setStrengthsText(String strengthsText) {
+        this.strengthsText = strengthsText;
+    }
+
+    public String getWeaknessesText() {
+        return weaknessesText;
+    }
+
+    public void setWeaknessesText(String weaknessesText) {
+        this.weaknessesText = weaknessesText;
+    }
+
+    public String getSuggestionsText() {
+        return suggestionsText;
+    }
+
+    public void setSuggestionsText(String suggestionsText) {
+        this.suggestionsText = suggestionsText;
+    }
+
+    public List<String> getStrengths() {
+        if (strengthsText == null || strengthsText.isBlank()) {
+            return List.of();
+        }
+        return List.of(strengthsText.split("\n"));
+    }
+
+    public void setStrengths(List<String> strengths) {
+        this.strengthsText = strengths != null ? String.join("\n", strengths) : null;
+    }
+
+    public List<String> getWeaknesses() {
+        if (weaknessesText == null || weaknessesText.isBlank()) {
+            return List.of();
+        }
+        return List.of(weaknessesText.split("\n"));
+    }
+
+    public void setWeaknesses(List<String> weaknesses) {
+        this.weaknessesText = weaknesses != null ? String.join("\n", weaknesses) : null;
+    }
+
+    public List<String> getSuggestions() {
+        if (suggestionsText == null || suggestionsText.isBlank()) {
+            return List.of();
+        }
+        return List.of(suggestionsText.split("\n"));
+    }
+
+    public void setSuggestions(List<String> suggestions) {
+        this.suggestionsText = suggestions != null ? String.join("\n", suggestions) : null;
     }
 }

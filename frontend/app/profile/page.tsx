@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 
 import Navbar from "@/components/layout/Navbar"
+import AlertModal from "@/components/ui/AlertModal"
 import { getJsonHeaders } from "@/lib/auth"
 
 
@@ -32,6 +33,7 @@ export default function ProfilePage() {
   const [email, setEmail] = useState("Email")
   const [password, setPassword] = useState("")
   const [profileImage, setProfileImage] = useState<string | null>(null)
+  const [modal, setModal] = useState<{ title: string; message: string; variant: "info" | "success" | "error" } | null>(null)
 
   const [interviews, setInterviews] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
@@ -97,6 +99,7 @@ export default function ProfilePage() {
               username,
               email,
               password,
+              profilePictureUrl: profileImage,
             })
           }
         )
@@ -122,18 +125,22 @@ export default function ProfilePage() {
         })
       )
 
-      alert(
-        "Profile updated successfully!"
-      )
+      setModal({
+        title: "Success",
+        message: "Profile updated successfully!",
+        variant: "success"
+      })
 
     }
     catch (error) {
 
       console.error(error)
 
-      alert(
-        "Update failed"
-      )
+      setModal({
+        title: "Error",
+        message: "Update failed. Please try again.",
+        variant: "error"
+      })
 
     } finally {
       setLoading(false)
@@ -538,6 +545,13 @@ export default function ProfilePage() {
         </div>
 
       </div>
+      <AlertModal
+        isOpen={!!modal}
+        title={modal?.title || ""}
+        message={modal?.message || ""}
+        variant={modal?.variant || "info"}
+        onClose={() => setModal(null)}
+      />
     </>
 
   )

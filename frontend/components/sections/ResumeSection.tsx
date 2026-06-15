@@ -4,6 +4,7 @@ import { Upload } from "lucide-react"
 import { useState } from "react"
 
 import { getMultipartHeaders } from "@/lib/auth"
+import AlertModal from "@/components/ui/AlertModal"
 
 type ResumeSectionProps = {
   setProfile: (profile: any) => void
@@ -11,6 +12,7 @@ type ResumeSectionProps = {
 
 export default function ResumeSection({ setProfile }: ResumeSectionProps) {
   const [isDragOver, setIsDragOver] = useState(false)
+  const [modal, setModal] = useState<{ title: string; message: string; variant: "info" | "success" | "error" } | null>(null)
 
   const browseFile = () => {
     document.getElementById("resume-upload")?.click()
@@ -56,9 +58,11 @@ export default function ResumeSection({ setProfile }: ResumeSectionProps) {
     }
     catch (err) {
       console.log(err)
-      alert(
-        "AI analysis is temporarily unavailable. Please try again in a few minutes."
-      )
+      setModal({
+        title: "Analysis Unavailable",
+        message: "AI analysis is temporarily unavailable. Please try again in a few minutes.",
+        variant: "error"
+      })
     }
     finally {
       setLoading(false)
@@ -129,6 +133,13 @@ export default function ResumeSection({ setProfile }: ResumeSectionProps) {
           </button>
         </div>
       </div>
+      <AlertModal
+        isOpen={!!modal}
+        title={modal?.title || ""}
+        message={modal?.message || ""}
+        variant={modal?.variant || "info"}
+        onClose={() => setModal(null)}
+      />
     </div>
   )
 }

@@ -131,10 +131,18 @@ public class MockInterviewService{
 
             ObjectMapper mapper = new ObjectMapper();
 
-            return mapper.readValue(
+            InterviewEvaluationResponse evalResponse = mapper.readValue(
                 response,
                 InterviewEvaluationResponse.class
             );
+
+            int calculatedOverall = (int) Math.round(
+                evalResponse.getProfessionalKnowledgeScore() * 0.6 + 
+                evalResponse.getCommunicationScore() * 0.4
+            );
+            evalResponse.setOverallScore(calculatedOverall);
+
+            return evalResponse;
 
         } catch(Exception e) {
 

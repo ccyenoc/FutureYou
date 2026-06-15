@@ -4,6 +4,7 @@ import { useSearchParams, useRouter } from "next/navigation"
 import { useEffect, useRef, useState, Suspense } from "react"
 import Navbar from "@/components/layout/Navbar"
 import { getJsonHeaders } from "@/lib/auth"
+import { jsPDF } from "jspdf"
 
 function InterviewPage() {
 
@@ -389,99 +390,152 @@ function InterviewPage() {
   }, [started])
 
   const downloadReport = () => {
+    if (!analysis) return
 
-    let report = `
-  FUTUREYOU INTERVIEW REPORT
+    const doc = new jsPDF()
+    const pageWidth = doc.internal.pageSize.getWidth()
+    const pageHeight = doc.internal.pageSize.getHeight()
+    const margin = 20
+    const maxLineWidth = pageWidth - (margin * 2)
+    let y = 30
 
-  Career:
-  ${career}
-
-  ========================================
-
-  OVERALL SCORE
-  ========================================
-
-  Overall Score: ${analysis.overallScore}
-  Technical Score: ${analysis.professionalKnowledgeScore ?? analysis.technicalScore}
-  Communication Score: ${analysis.communicationScore}
-
-  ========================================
-
-  STRENGTHS
-  ========================================
-
-  ${analysis.strengths.join("\n")}
-
-  ========================================
-
-  WEAKNESSES
-  ========================================
-
-  ${analysis.weaknesses.join("\n")}
-
-  ========================================
-
-  SUGGESTIONS
-  ========================================
-
-  ${analysis.suggestions.join("\n")}
-
-  ========================================
-
-  QUESTION REVIEW
-  ========================================
-
-  `
-
-    analysis.questionReview?.forEach(
-      (
-        review: any,
-        index: number
-      ) => {
-
-        report += `
-
-  Question ${index + 1}
-
-  Question:
-  ${review.question}
-
-  Your Answer:
-  ${review.answer}
-
-  Feedback:
-  ${review.feedback}
-
-  Suggested Answer:
-  ${review.suggestedAnswer}
-
-  ----------------------------------------
-
-  `
+    const checkPageBreak = (neededHeight: number) => {
+      if (y + neededHeight > pageHeight - margin) {
+        doc.addPage()
+        y = margin + 10
       }
-    )
+    }
 
-    const blob = new Blob(
-      [report],
-      {
-        type: "text/plain"
-      }
-    )
+    const addHeading = (text: string) => {
+      checkPageBreak(15)
+      doc.setFont("helvetica", "bold")
+      doc.setFontSize(14)
+      doc.setTextColor(109, 40, 217) // Violet color to match branding
+      doc.text(text, margin, y)
+      y += 8
+      doc.setDrawColor(229, 231, 235) // Light gray divider line
+      doc.line(margin, y, pageWidth - margin, y)
+      y += 10
+    }
 
-    const url =
-      URL.createObjectURL(blob)
+    const addBodyText = (label: string, text: string) => {
+      doc.setFont("helvetica", "bold")
+      doc.setFontSize(10)
+      doc.setTextColor(31, 41, 55) // Dark slate for label
 
-    const a =
-      document.createElement("a")
+      const labelLines: string[] = doc.splitTextToSize(`${label}: `, maxLineWidth)
+      checkPageBreak(labelLines.length * 6)
 
-    a.href = url
+      doc.text(`${label}:`, margin, y)
 
-    a.download =
-      "FutureYou-Interview-Report.txt"
+      doc.setFont("helvetica", "normal")
+      doc.setTextColor(75, 85, 99) // Gray for content
+      const textLines: string[] = doc.splitTextToSize(text || "", maxLineWidth)
 
-    a.click()
+      textLines.forEach((line) => {
+        checkPageBreak(6)
+        doc.text(line, margin + 25, y)
+        y += 6
+      })
+      y += 4
+    }
 
-    URL.revokeObjectURL(url)
+    // Document Header
+    doc.setFont("helvetica", "bold")
+    doc.setFontSize(22)
+    doc.setTextColor(109, 40, 217)
+    doc.text("FUTUREYOU INTERVIEW REPORT", margin, 20)
+
+    doc.setFont("helvetica", "normal")
+    doc.setFontSize(11)
+    doc.setTextColor(107, 114, 128)
+    doc.text(`Target Role: ${career || ""}`, margin, 28)
+
+    // Divider
+    doc.setDrawColor(109, 40, 217)
+    doc.setLineWidth(0.5)
+    doc.line(margin, 31, pageWidth - margin, 31)
+    y = 42
+
+    // Overall Score
+    addHeading("OVERALL SCORE")
+    addBodyText("Overall Score", `${analysis.overallScore}/100`)
+    addBodyText("Professional Knowledge", `${analysis.professionalKnowledgeScore ?? analysis.technicalScore}/100`)
+    addBodyText("Communication", `${analysis.communicationScore}/100`)
+    y += 5
+
+    // Strengths
+    if (analysis.strengths && analysis.strengths.length > 0) {
+      addHeading("STRENGTHS")
+      analysis.strengths.forEach((strength: string) => {
+        const lines: string[] = doc.splitTextToSize(`• ${strength}`, maxLineWidth)
+        doc.setFont("helvetica", "normal")
+        doc.setFontSize(10)
+        doc.setTextColor(75, 85, 99)
+        lines.forEach((line) => {
+          checkPageBreak(6)
+          doc.text(line, margin, y)
+          y += 6
+        })
+      })
+      y += 8
+    }
+
+    // Weaknesses
+    if (analysis.weaknesses && analysis.weaknesses.length > 0) {
+      addHeading("WEAKNESSES")
+      analysis.weaknesses.forEach((weakness: string) => {
+        const lines: string[] = doc.splitTextToSize(`• ${weakness}`, maxLineWidth)
+        doc.setFont("helvetica", "normal")
+        doc.setFontSize(10)
+        doc.setTextColor(75, 85, 99)
+        lines.forEach((line) => {
+          checkPageBreak(6)
+          doc.text(line, margin, y)
+          y += 6
+        })
+      })
+      y += 8
+    }
+
+    // Suggestions
+    if (analysis.suggestions && analysis.suggestions.length > 0) {
+      addHeading("SUGGESTIONS")
+      analysis.suggestions.forEach((suggestion: string) => {
+        const lines: string[] = doc.splitTextToSize(`• ${suggestion}`, maxLineWidth)
+        doc.setFont("helvetica", "normal")
+        doc.setFontSize(10)
+        doc.setTextColor(75, 85, 99)
+        lines.forEach((line) => {
+          checkPageBreak(6)
+          doc.text(line, margin, y)
+          y += 6
+        })
+      })
+      y += 8
+    }
+
+    // Question Review
+    if (analysis.questionReview && analysis.questionReview.length > 0) {
+      addHeading("QUESTION-BY-QUESTION REVIEW")
+      analysis.questionReview.forEach((review: any, index: number) => {
+        checkPageBreak(25)
+        doc.setFont("helvetica", "bold")
+        doc.setFontSize(12)
+        doc.setTextColor(109, 40, 217)
+        doc.text(`Question ${index + 1}`, margin, y)
+        y += 8
+
+        addBodyText("Question", review.question)
+        addBodyText("Your Answer", review.answer)
+        addBodyText("AI Feedback", review.feedback)
+        addBodyText("Suggested", review.suggestedAnswer)
+
+        y += 4
+      })
+    }
+
+    doc.save("FutureYou-Interview-Report.pdf")
   }
 
   useEffect(() => {

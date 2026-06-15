@@ -12,6 +12,9 @@ type Career = {
   futurePotential: number
   salaryPotential: number
   growthPotential: number
+  futurePotentialReason?: string
+  salaryPotentialReason?: string
+  growthPotentialReason?: string
   roadmap: RoadmapPhase[]
 }
 
@@ -125,17 +128,32 @@ export default function RoadmapSection({
                   border-purple-500/20
                   bg-purple-500/10
                   p-4
+                  flex
+                  flex-col
+                  justify-between
                 "
               >
-
-                <p className="text-sm text-purple-300">
-                  Future Potential
-                </p>
-
-                <h2 className="mt-2 text-3xl font-bold text-white">
-                  {career.futurePotential}%
-                </h2>
-
+                <div>
+                  <p className="text-sm text-purple-300 font-medium">
+                    Future Potential
+                  </p>
+                  <h2 className="mt-2 text-3xl font-bold text-white">
+                    {career.futurePotential}%
+                  </h2>
+                </div>
+                <div className="mt-3">
+                  <div className="h-1.5 w-full bg-purple-950/50 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-purple-500 rounded-full"
+                      style={{ width: `${career.futurePotential}%` }}
+                    />
+                  </div>
+                  {career.futurePotentialReason && (
+                    <p className="text-[11px] text-purple-300/85 mt-1.5 leading-relaxed font-medium">
+                      {career.futurePotentialReason}
+                    </p>
+                  )}
+                </div>
               </div>
 
               <div
@@ -145,17 +163,32 @@ export default function RoadmapSection({
                   border-green-500/20
                   bg-green-500/10
                   p-4
+                  flex
+                  flex-col
+                  justify-between
                 "
               >
-
-                <p className="text-sm text-green-300">
-                  Salary Potential
-                </p>
-
-                <h2 className="mt-2 text-3xl font-bold text-white">
-                  {career.salaryPotential}%
-                </h2>
-
+                <div>
+                  <p className="text-sm text-green-300 font-medium">
+                    Salary Potential
+                  </p>
+                  <h2 className="mt-2 text-3xl font-bold text-white">
+                    {career.salaryPotential}%
+                  </h2>
+                </div>
+                <div className="mt-3">
+                  <div className="h-1.5 w-full bg-green-950/50 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-green-500 rounded-full"
+                      style={{ width: `${career.salaryPotential}%` }}
+                    />
+                  </div>
+                  {career.salaryPotentialReason && (
+                    <p className="text-[11px] text-green-300/85 mt-1.5 leading-relaxed font-medium">
+                      {career.salaryPotentialReason}
+                    </p>
+                  )}
+                </div>
               </div>
 
               <div
@@ -165,17 +198,32 @@ export default function RoadmapSection({
                   border-pink-500/20
                   bg-pink-500/10
                   p-4
+                  flex
+                  flex-col
+                  justify-between
                 "
               >
-
-                <p className="text-sm text-pink-300">
-                  Growth Potential
-                </p>
-
-                <h2 className="mt-2 text-3xl font-bold text-white">
-                  {career.growthPotential}%
-                </h2>
-
+                <div>
+                  <p className="text-sm text-pink-300 font-medium">
+                    Growth Potential
+                  </p>
+                  <h2 className="mt-2 text-3xl font-bold text-white">
+                    {career.growthPotential}%
+                  </h2>
+                </div>
+                <div className="mt-3">
+                  <div className="h-1.5 w-full bg-pink-950/50 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-pink-500 rounded-full"
+                      style={{ width: `${career.growthPotential}%` }}
+                    />
+                  </div>
+                  {career.growthPotentialReason && (
+                    <p className="text-[11px] text-pink-300/85 mt-1.5 leading-relaxed font-medium">
+                      {career.growthPotentialReason}
+                    </p>
+                  )}
+                </div>
               </div>
 
             </div>
@@ -358,20 +406,6 @@ export default function RoadmapSection({
                     </div>
 
                   ))}
-
-                </div>
-
-
-
-
-
-                {/* FOOTER */}
-
-                <div className="border-t border-white/10 pt-4">
-
-                  <p className="text-sm text-purple-300">
-                    AI Personalized Phase
-                  </p>
 
                 </div>
 

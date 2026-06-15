@@ -14,6 +14,12 @@ public class CareerRecommendation {
 
     private int growthPotential;
 
+    private String futurePotentialReason;
+
+    private String salaryPotentialReason;
+
+    private String growthPotentialReason;
+
     private List<RoadmapPhase> roadmap;
 
     public CareerRecommendation() {
@@ -25,6 +31,9 @@ public class CareerRecommendation {
         int futurePotential,
         int salaryPotential,
         int growthPotential,
+        String futurePotentialReason,
+        String salaryPotentialReason,
+        String growthPotentialReason,
         List<RoadmapPhase> roadmap
     ) {
         this.title = title;
@@ -32,6 +41,9 @@ public class CareerRecommendation {
         this.futurePotential = futurePotential;
         this.salaryPotential = salaryPotential;
         this.growthPotential = growthPotential;
+        this.futurePotentialReason = futurePotentialReason;
+        this.salaryPotentialReason = salaryPotentialReason;
+        this.growthPotentialReason = growthPotentialReason;
         this.roadmap = roadmap;
     }
 
@@ -73,6 +85,30 @@ public class CareerRecommendation {
 
     public void setGrowthPotential(int growthPotential) {
         this.growthPotential = growthPotential;
+    }
+
+    public String getFuturePotentialReason() {
+        return futurePotentialReason;
+    }
+
+    public void setFuturePotentialReason(String futurePotentialReason) {
+        this.futurePotentialReason = futurePotentialReason;
+    }
+
+    public String getSalaryPotentialReason() {
+        return salaryPotentialReason;
+    }
+
+    public void setSalaryPotentialReason(String salaryPotentialReason) {
+        this.salaryPotentialReason = salaryPotentialReason;
+    }
+
+    public String getGrowthPotentialReason() {
+        return growthPotentialReason;
+    }
+
+    public void setGrowthPotentialReason(String growthPotentialReason) {
+        this.growthPotentialReason = growthPotentialReason;
     }
 
     public List<RoadmapPhase> getRoadmap() {

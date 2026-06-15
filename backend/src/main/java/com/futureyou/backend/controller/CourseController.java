@@ -17,20 +17,12 @@ public class CourseController {
 
     private final CourseService courseService;
 
-    public CourseController(
-        CourseService courseService
-    ) {
-        this.courseService =
-            courseService;
+    public CourseController(CourseService courseService) {
+        this.courseService = courseService;
     }
 
     @PostMapping
-    public CourseResponse getCourses(
-        @RequestBody CourseRequest request
-    ) {
-
-        return courseService.getCourses(
-            request.getCareer()
-        );
+    public CourseResponse getCourses(@RequestBody CourseRequest request) {
+        return courseService.getCourses(request.getCareer());
     }
 }

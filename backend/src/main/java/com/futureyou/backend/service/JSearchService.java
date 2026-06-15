@@ -29,16 +29,17 @@ public class JSearchService {
             // normalize career titles by removing parenthetical details (e.g., "Full-Stack
             String query = career != null ? career.replaceAll("\\s*\\([^)]*\\)", "").trim() : "";
 
-            // country mapping
-            String country = getCountryCode(region);
+            String queryWithRegion = query;
+            if (region != null && !region.isBlank()) {
+                queryWithRegion += " in " + region.trim();
+            }
 
-            String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
+            String encodedQuery = URLEncoder.encode(queryWithRegion, StandardCharsets.UTF_8);
 
             String url = "https://jsearch.p.rapidapi.com/search"
                     + "?query=" + encodedQuery
                     + "&page=1"
                     + "&num_pages=1"
-                    + "&country=" + country
                     + "&date_posted=all";
 
             System.out.println("JSEARCH URL:");

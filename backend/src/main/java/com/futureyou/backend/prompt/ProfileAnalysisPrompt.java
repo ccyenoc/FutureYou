@@ -42,8 +42,11 @@ public class ProfileAnalysisPrompt {
     - title
     - reasoning
     - futurePotential
+    - futurePotentialReason (a short, single-sentence explanation of why this score was given based on the resume and job market outlook)
     - salaryPotential
+    - salaryPotentialReason (a short, single-sentence explanation of why this salary score was given based on the resume and standard pay brackets)
     - growthPotential
+    - growthPotentialReason (a short, single-sentence explanation of why this growth score was given based on industry trends)
     - roadmap
 
     futurePotential, salaryPotential,
@@ -91,10 +94,13 @@ public class ProfileAnalysisPrompt {
           "Strong programming and analytical skills suitable for AI systems development.",
 
           "futurePotential":95,
+          "futurePotentialReason":"AI is the fastest-growing technology sector with critical long-term stability.",
 
           "salaryPotential":90,
+          "salaryPotentialReason":"AI engineering is in the top 10% bracket for entry-level tech compensation.",
 
           "growthPotential":94,
+          "growthPotentialReason":"Job listings for AI/ML roles are increasing by over 30% year-over-year.",
 
           "roadmap":[
 

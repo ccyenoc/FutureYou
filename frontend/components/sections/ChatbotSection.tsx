@@ -789,13 +789,13 @@ export default function ChatbotSection({ career, analysis }: ChatbotSectionProps
                         </div>
                       )}
 
-                      {msg.skillGap.missingTechnicalSkills && msg.skillGap.missingTechnicalSkills.length > 0 && (
+                      {msg.skillGap.missingHardSkills && msg.skillGap.missingHardSkills.length > 0 && (
                         <div>
                           <p className="text-yellow-400 mb-2 text-xs font-semibold uppercase tracking-wider">
-                            Missing Technical Skills
+                            Missing Hard Skills
                           </p>
                           <div className="space-y-1">
-                            {msg.skillGap.missingTechnicalSkills.map((skill: string) => (
+                            {msg.skillGap.missingHardSkills.map((skill: string) => (
                               <div key={skill} className="text-zinc-300 text-sm flex items-center gap-1.5">
                                 <span className="text-yellow-500">⚠</span> {skill}
                               </div>

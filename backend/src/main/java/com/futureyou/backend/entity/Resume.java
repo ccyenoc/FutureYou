@@ -1,4 +1,4 @@
- package com.futureyou.backend.entity;
+package com.futureyou.backend.entity;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +11,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-
 @Entity
 @Table(name = "resumes")
 public class Resume {
@@ -21,8 +20,6 @@ public class Resume {
     private Long id;
 
     private String fileName;
-
-    private String fileUrl;
 
     @Column(columnDefinition = "TEXT")
     private String extractedText;
@@ -41,11 +38,9 @@ public class Resume {
             String fileName,
             String fileUrl,
             String extractedText,
-            User user
-    ) {
+            User user) {
         this.id = id;
         this.fileName = fileName;
-        this.fileUrl = fileUrl;
         this.extractedText = extractedText;
         this.user = user;
     }
@@ -66,14 +61,6 @@ public class Resume {
         this.fileName = fileName;
     }
 
-    public String getFileUrl() {
-        return fileUrl;
-    }
-
-    public void setFileUrl(String fileUrl) {
-        this.fileUrl = fileUrl;
-    }
-
     public String getExtractedText() {
         return extractedText;
     }
@@ -90,7 +77,7 @@ public class Resume {
         this.user = user;
     }
 
-     public LocalDateTime getUploadedAt() {
+    public LocalDateTime getUploadedAt() {
         return uploadedAt;
     }
 

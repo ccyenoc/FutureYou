@@ -15,18 +15,23 @@ public class CourseService {
 
     private final TavilyService tavilyService;
 
-    public CourseService( TavilyService tavilyService) {
+    public CourseService(TavilyService tavilyService) {
         this.tavilyService = tavilyService;
     }
 
-    public CourseResponse getCourses( String career ) {
+    public CourseResponse getCourses(String career) {
 
         try {
 
-            String query =
-            "best online courses for "
-            + career
-            + " Coursera Udemy freeCodeCamp";
+            String cleanCareer = career
+                    .replaceAll("\\(.*?\\)", "")
+                    .replaceAll("(?i)\\b(Senior|Junior|Staff|Lead|Principal|Associate|Entry-Level)\\b", "")
+                    .replaceAll("\\s+", " ")
+                    .trim();
+
+            String query = String.format(
+                    "(site:coursera.org/learn OR site:udemy.com/course OR site:edx.org/learn) %s",
+                    cleanCareer);
 
             String result = tavilyService.search(query);
 
@@ -40,31 +45,30 @@ public class CourseService {
 
             if (results.isArray()) {
 
-                for ( int i = 0; i < Math.min(results.size(),5); i++) {
+                for (int i = 0; i < Math.min(results.size(), 5); i++) {
 
                     JsonNode item = results.get(i);
 
                     CourseRecommendation course = new CourseRecommendation();
 
-                    course.setTitle( item.path("title").asText() );
+                    course.setTitle(item.path("title").asText());
 
-                    course.setDescription( item.path("content") .asText() );
+                    course.setDescription(item.path("content").asText());
 
-                    course.setUrl( item.path("url").asText() );
+                    course.setUrl(item.path("url").asText());
 
-                    course.setProvider( "Online Course" );
+                    course.setProvider("Online Course");
 
                     courses.add(course);
                 }
             }
 
-            return new CourseResponse( courses );
+            return new CourseResponse(courses);
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
 
-            return new CourseResponse( new ArrayList<>() );
+            return new CourseResponse(new ArrayList<>());
         }
     }
 }

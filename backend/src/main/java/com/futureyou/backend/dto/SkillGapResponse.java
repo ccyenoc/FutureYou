@@ -6,7 +6,7 @@ public class SkillGapResponse {
 
     private List<String> matchedSkills;
 
-    private List<String> missingTechnicalSkills;
+    private List<String> missingHardSkills;
 
     private List<String> missingSoftSkills;
 
@@ -16,12 +16,12 @@ public class SkillGapResponse {
 
     public SkillGapResponse(
         List<String> matchedSkills,
-        List<String> missingTechnicalSkills,
+        List<String> missingHardSkills,
         List<String> missingSoftSkills,
         List<String> topPrioritySkills
     ) {
         this.matchedSkills = matchedSkills;
-        this.missingTechnicalSkills = missingTechnicalSkills;
+        this.missingHardSkills = missingHardSkills;
         this.missingSoftSkills = missingSoftSkills;
         this.topPrioritySkills = topPrioritySkills;
     }
@@ -36,15 +36,15 @@ public class SkillGapResponse {
         this.matchedSkills = matchedSkills;
     }
 
-    public List<String> getMissingTechnicalSkills() {
-        return missingTechnicalSkills;
+    public List<String> getMissingHardSkills() {
+        return missingHardSkills;
     }
 
-    public void setMissingTechnicalSkills(
-        List<String> missingTechnicalSkills
+    public void setMissingHardSkills(
+        List<String> missingHardSkills
     ) {
-        this.missingTechnicalSkills =
-        missingTechnicalSkills;
+        this.missingHardSkills =
+        missingHardSkills;
     }
 
     public List<String> getMissingSoftSkills() {
